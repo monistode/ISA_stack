@@ -1,6 +1,5 @@
 	soc_system u0 (
 		.clk_clk                 (<connected-to-clk_clk>),                 //             clk.clk
-		.reset_reset_n           (<connected-to-reset_reset_n>),           //           reset.reset_n
 		.hps_0_h2f_reset_reset_n (<connected-to-hps_0_h2f_reset_reset_n>), // hps_0_h2f_reset.reset_n
 		.memory_mem_a            (<connected-to-memory_mem_a>),            //          memory.mem_a
 		.memory_mem_ba           (<connected-to-memory_mem_ba>),           //                .mem_ba
@@ -17,6 +16,14 @@
 		.memory_mem_dqs_n        (<connected-to-memory_mem_dqs_n>),        //                .mem_dqs_n
 		.memory_mem_odt          (<connected-to-memory_mem_odt>),          //                .mem_odt
 		.memory_mem_dm           (<connected-to-memory_mem_dm>),           //                .mem_dm
-		.memory_oct_rzqin        (<connected-to-memory_oct_rzqin>)         //                .oct_rzqin
+		.memory_oct_rzqin        (<connected-to-memory_oct_rzqin>),        //                .oct_rzqin
+		.reset_reset_n           (<connected-to-reset_reset_n>),           //           reset.reset_n
+		.sdram_address           (<connected-to-sdram_address>),           //           sdram.address
+		.sdram_byte_enable       (<connected-to-sdram_byte_enable>),       //                .byte_enable
+		.sdram_read              (<connected-to-sdram_read>),              //                .read
+		.sdram_write             (<connected-to-sdram_write>),             //                .write
+		.sdram_write_data        (<connected-to-sdram_write_data>),        //                .write_data
+		.sdram_acknowledge       (<connected-to-sdram_acknowledge>),       //                .acknowledge
+		.sdram_read_data         (<connected-to-sdram_read_data>)          //                .read_data
 	);
 

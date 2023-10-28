@@ -1,7 +1,6 @@
 
 module soc_system (
 	clk_clk,
-	reset_reset_n,
 	hps_0_h2f_reset_reset_n,
 	memory_mem_a,
 	memory_mem_ba,
@@ -18,10 +17,17 @@ module soc_system (
 	memory_mem_dqs_n,
 	memory_mem_odt,
 	memory_mem_dm,
-	memory_oct_rzqin);	
+	memory_oct_rzqin,
+	reset_reset_n,
+	sdram_address,
+	sdram_byte_enable,
+	sdram_read,
+	sdram_write,
+	sdram_write_data,
+	sdram_acknowledge,
+	sdram_read_data);	
 
 	input		clk_clk;
-	input		reset_reset_n;
 	output		hps_0_h2f_reset_reset_n;
 	output	[14:0]	memory_mem_a;
 	output	[2:0]	memory_mem_ba;
@@ -39,4 +45,12 @@ module soc_system (
 	output		memory_mem_odt;
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
+	input		reset_reset_n;
+	input	[27:0]	sdram_address;
+	input	[7:0]	sdram_byte_enable;
+	input		sdram_read;
+	input		sdram_write;
+	input	[63:0]	sdram_write_data;
+	output		sdram_acknowledge;
+	output	[63:0]	sdram_read_data;
 endmodule
