@@ -46,7 +46,7 @@ module soc_system (
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
 	input		reset_reset_n;
-	input	[27:0]	sdram_address;
+	input	[15:0]	sdram_address;
 	input	[7:0]	sdram_byte_enable;
 	input		sdram_read;
 	input		sdram_write;

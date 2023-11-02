@@ -89,12 +89,12 @@
    version="22.1"
    enabled="1">
   <parameter name="BURSTCOUNT_WIDTH" value="1" />
-  <parameter name="DATA_WIDTH" value="64" />
+  <parameter name="DATA_WIDTH" value="8" />
   <parameter name="ENABLE_SLAVE_PORT" value="false" />
   <parameter name="MASTER_ADDRESS_DEF" value="536870912" />
   <parameter name="MASTER_ADDRESS_WIDTH" value="32" />
   <parameter name="MAX_PENDING_READS" value="1" />
-  <parameter name="SLAVE_ADDRESS_WIDTH" value="25" />
+  <parameter name="SLAVE_ADDRESS_WIDTH" value="16" />
   <parameter name="SUB_WINDOW_COUNT" value="1" />
  </module>
  <module
@@ -102,10 +102,10 @@
    kind="altera_up_external_bus_to_avalon_bridge"
    version="18.0"
    enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="addr_size" value="256" />
-  <parameter name="addr_size_multiplier" value="Mbytes" />
+  <parameter name="addr_size" value="64" />
+  <parameter name="addr_size_multiplier" value="Kbytes" />
   <parameter name="data_size" value="64" />
  </module>
  <module name="clk_0" kind="clock_source" version="22.1" enabled="1">
@@ -265,7 +265,7 @@
   <parameter name="FPGA_PERIPHERAL_OUTPUT_CLOCK_FREQ_SPIM1_SCLK_OUT" value="100" />
   <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="GP_Enable" value="false" />
-  <parameter name="H2F_AXI_CLOCK_FREQ" value="50000000" />
+  <parameter name="H2F_AXI_CLOCK_FREQ" value="100" />
   <parameter name="H2F_CTI_CLOCK_FREQ" value="100" />
   <parameter name="H2F_DEBUG_APB_CLOCK_FREQ" value="100" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="100" />
@@ -345,7 +345,7 @@
   <parameter name="MEM_TWR_NS" value="15.0" />
   <parameter name="MEM_TWTR" value="4" />
   <parameter name="MEM_USER_LEVELING_MODE" value="Leveling" />
-  <parameter name="MEM_VENDOR" value="Other" />
+  <parameter name="MEM_VENDOR" value="JEDEC" />
   <parameter name="MEM_VERBOSE" value="true" />
   <parameter name="MEM_VOLTAGE" value="1.5V DDR3" />
   <parameter name="MEM_WTCL" value="7" />
@@ -486,7 +486,7 @@
   <parameter name="S2FINTERRUPT_UART_Enable" value="false" />
   <parameter name="S2FINTERRUPT_USB_Enable" value="false" />
   <parameter name="S2FINTERRUPT_WATCHDOG_Enable" value="false" />
-  <parameter name="S2F_Width" value="2" />
+  <parameter name="S2F_Width" value="0" />
   <parameter name="SDIO_Mode" value="N/A" />
   <parameter name="SDIO_PinMuxing" value="Unused" />
   <parameter name="SEQUENCER_TYPE" value="NIOS" />
@@ -662,12 +662,11 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="clock" version="22.1" start="clk_0.clk" end="bridge_0.clk" />
  <connection
    kind="clock"
    version="22.1"
-   start="clk_0.clk"
-   end="hps_0.h2f_axi_clock" />
+   start="hps_0.h2f_user2_clock"
+   end="bridge_0.clk" />
  <connection
    kind="clock"
    version="22.1"

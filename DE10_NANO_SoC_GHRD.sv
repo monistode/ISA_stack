@@ -42,13 +42,13 @@ wire hps_fpga_reset_n;
 wire                fpga_clk_50;
 reg [7:0]    fpga_led_internal = 8'd0;
 
-reg [27:0] address = 13'd0;
+reg [16:0] address = 16'd0;
 reg read = 1'b1;
 reg write = 1'b0;
-wire acknowledge;
+reg acknowledge;
 reg [63:0] read_data;
 reg [63:0] data = 64'd0;
-reg [63:0] write_data = 64'd0;
+reg [63:0] write_data = 64'hBAD;
 reg [7:0] byte_enable = 8'b11111111;
 
 // connection of internal logics
@@ -93,23 +93,33 @@ soc_system u0(
 
 reg [25: 0] counter;
 
-always_ff @ (posedge acknowledge) begin
-    data <= read_data;
+always @(posedge acknowledge) begin
+if (read) data <= read_data;
 end
 
 always @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
-	 read <= 1;
-	 write <= 0;
-	 byte_enable <= 8'hFF;
+	
 	 
 	 if (~hps_fpga_reset_n) begin
         counter <= 0;
     end else if (counter == 24999999) begin
         counter <= 0;
+		  read <= 0;
+		  write <= 0;
 		  fpga_led_internal <= data[7:0];
     end
-    else
+    else begin
         counter <= counter + 1'b1;
+			if (data[7:0] == 255) begin
+				write_data[31:0] <= 'h12345678;
+				write <= 1;
+				read <= 0;
+			end else begin
+				read <= 1;
+				write <= 0;
+			end
+			byte_enable <= 8'hFF;
+	 end
 end
 
 
