@@ -102,14 +102,14 @@
    kind="altera_up_external_bus_to_avalon_bridge"
    version="18.0"
    enabled="1">
-  <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="400000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="addr_size" value="64" />
   <parameter name="addr_size_multiplier" value="Kbytes" />
   <parameter name="data_size" value="64" />
  </module>
  <module name="clk_0" kind="clock_source" version="22.1" enabled="1">
-  <parameter name="clockFrequency" value="50000000" />
+  <parameter name="clockFrequency" value="400000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
@@ -211,7 +211,7 @@
   <parameter name="EXPORT_AFI_HALF_CLK" value="false" />
   <parameter name="EXTRA_SETTINGS" value="" />
   <parameter name="F2H_AXI_CLOCK_FREQ" value="100" />
-  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="100000000" />
+  <parameter name="F2H_SDRAM0_CLOCK_FREQ" value="400000000" />
   <parameter name="F2H_SDRAM1_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM2_CLOCK_FREQ" value="100" />
   <parameter name="F2H_SDRAM3_CLOCK_FREQ" value="100" />
@@ -465,7 +465,7 @@
   <parameter name="S2FCLK_USER1CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER1CLK_FREQ" value="50.0" />
   <parameter name="S2FCLK_USER2CLK" value="1" />
-  <parameter name="S2FCLK_USER2CLK_Enable" value="true" />
+  <parameter name="S2FCLK_USER2CLK_Enable" value="false" />
   <parameter name="S2FCLK_USER2CLK_FREQ" value="100.0" />
   <parameter name="S2FINTERRUPT_CAN_Enable" value="false" />
   <parameter name="S2FINTERRUPT_CLOCKPERIPHERAL_Enable" value="false" />
@@ -662,20 +662,16 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="clock" version="22.1" start="clk_0.clk" end="bridge_0.clk" />
  <connection
    kind="clock"
    version="22.1"
-   start="hps_0.h2f_user2_clock"
-   end="bridge_0.clk" />
- <connection
-   kind="clock"
-   version="22.1"
-   start="hps_0.h2f_user2_clock"
+   start="clk_0.clk"
    end="address_span_extender_0.clock" />
  <connection
    kind="clock"
    version="22.1"
-   start="hps_0.h2f_user2_clock"
+   start="clk_0.clk"
    end="hps_0.f2h_sdram0_clock" />
  <connection
    kind="reset"

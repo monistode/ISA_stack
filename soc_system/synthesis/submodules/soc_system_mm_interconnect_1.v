@@ -7,7 +7,7 @@
 
 `timescale 1 ps / 1 ps
 module soc_system_mm_interconnect_1 (
-		input  wire        hps_0_h2f_user2_clock_clk,                                          //                                        hps_0_h2f_user2_clock.clk
+		input  wire        clk_0_clk_clk,                                                      //                                                    clk_0_clk.clk
 		input  wire        address_span_extender_0_reset_reset_bridge_in_reset_reset,          //          address_span_extender_0_reset_reset_bridge_in_reset.reset
 		input  wire        hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset, // hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset.reset
 		input  wire [31:0] address_span_extender_0_expanded_master_address,                    //                      address_span_extender_0_expanded_master.address
@@ -153,7 +153,7 @@ module soc_system_mm_interconnect_1 (
 		.AV_LINEWRAPBURSTS           (0),
 		.AV_REGISTERINCOMINGSIGNALS  (0)
 	) address_span_extender_0_expanded_master_translator (
-		.clk                    (hps_0_h2f_user2_clock_clk),                                                                  //                       clk.clk
+		.clk                    (clk_0_clk_clk),                                                                              //                       clk.clk
 		.reset                  (address_span_extender_0_reset_reset_bridge_in_reset_reset),                                  //                     reset.reset
 		.uav_address            (address_span_extender_0_expanded_master_translator_avalon_universal_master_0_address),       // avalon_universal_master_0.address
 		.uav_burstcount         (address_span_extender_0_expanded_master_translator_avalon_universal_master_0_burstcount),    //                          .burstcount
@@ -215,7 +215,7 @@ module soc_system_mm_interconnect_1 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) hps_0_f2h_sdram0_data_translator (
-		.clk                    (hps_0_h2f_user2_clock_clk),                                          //                      clk.clk
+		.clk                    (clk_0_clk_clk),                                                      //                      clk.clk
 		.reset                  (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), //                    reset.reset
 		.uav_address            (hps_0_f2h_sdram0_data_agent_m0_address),                             // avalon_universal_slave_0.address
 		.uav_burstcount         (hps_0_f2h_sdram0_data_agent_m0_burstcount),                          //                         .burstcount
@@ -305,7 +305,7 @@ module soc_system_mm_interconnect_1 (
 		.USE_READRESPONSE          (0),
 		.USE_WRITERESPONSE         (0)
 	) address_span_extender_0_expanded_master_agent (
-		.clk                   (hps_0_h2f_user2_clock_clk),                                                                  //       clk.clk
+		.clk                   (clk_0_clk_clk),                                                                              //       clk.clk
 		.reset                 (address_span_extender_0_reset_reset_bridge_in_reset_reset),                                  // clk_reset.reset
 		.av_address            (address_span_extender_0_expanded_master_translator_avalon_universal_master_0_address),       //        av.address
 		.av_write              (address_span_extender_0_expanded_master_translator_avalon_universal_master_0_write),         //          .write
@@ -372,7 +372,7 @@ module soc_system_mm_interconnect_1 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) hps_0_f2h_sdram0_data_agent (
-		.clk                     (hps_0_h2f_user2_clock_clk),                                          //             clk.clk
+		.clk                     (clk_0_clk_clk),                                                      //             clk.clk
 		.reset                   (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), //       clk_reset.reset
 		.m0_address              (hps_0_f2h_sdram0_data_agent_m0_address),                             //              m0.address
 		.m0_burstcount           (hps_0_f2h_sdram0_data_agent_m0_burstcount),                          //                .burstcount
@@ -431,7 +431,7 @@ module soc_system_mm_interconnect_1 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) hps_0_f2h_sdram0_data_agent_rsp_fifo (
-		.clk               (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk               (clk_0_clk_clk),                                                      //       clk.clk
 		.reset             (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.in_data           (hps_0_f2h_sdram0_data_agent_rf_source_data),                         //        in.data
 		.in_valid          (hps_0_f2h_sdram0_data_agent_rf_source_valid),                        //          .valid
@@ -464,7 +464,7 @@ module soc_system_mm_interconnect_1 (
 		.sink_data          (address_span_extender_0_expanded_master_agent_cp_data),          //          .data
 		.sink_startofpacket (address_span_extender_0_expanded_master_agent_cp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (address_span_extender_0_expanded_master_agent_cp_endofpacket),   //          .endofpacket
-		.clk                (hps_0_h2f_user2_clock_clk),                                      //       clk.clk
+		.clk                (clk_0_clk_clk),                                                  //       clk.clk
 		.reset              (address_span_extender_0_reset_reset_bridge_in_reset_reset),      // clk_reset.reset
 		.src_ready          (router_src_ready),                                               //       src.ready
 		.src_valid          (router_src_valid),                                               //          .valid
@@ -480,7 +480,7 @@ module soc_system_mm_interconnect_1 (
 		.sink_data          (hps_0_f2h_sdram0_data_agent_rp_data),                                //          .data
 		.sink_startofpacket (hps_0_f2h_sdram0_data_agent_rp_startofpacket),                       //          .startofpacket
 		.sink_endofpacket   (hps_0_f2h_sdram0_data_agent_rp_endofpacket),                         //          .endofpacket
-		.clk                (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk                (clk_0_clk_clk),                                                      //       clk.clk
 		.reset              (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready          (router_001_src_ready),                                               //       src.ready
 		.src_valid          (router_001_src_valid),                                               //          .valid
@@ -491,7 +491,7 @@ module soc_system_mm_interconnect_1 (
 	);
 
 	soc_system_mm_interconnect_1_cmd_demux cmd_demux (
-		.clk                (hps_0_h2f_user2_clock_clk),                                 //       clk.clk
+		.clk                (clk_0_clk_clk),                                             //       clk.clk
 		.reset              (address_span_extender_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_src_ready),                                          //      sink.ready
 		.sink_channel       (router_src_channel),                                        //          .channel
@@ -508,7 +508,7 @@ module soc_system_mm_interconnect_1 (
 	);
 
 	soc_system_mm_interconnect_1_cmd_mux cmd_mux (
-		.clk                 (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk                 (clk_0_clk_clk),                                                      //       clk.clk
 		.reset               (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_src_ready),                                                  //       src.ready
 		.src_valid           (cmd_mux_src_valid),                                                  //          .valid
@@ -525,7 +525,7 @@ module soc_system_mm_interconnect_1 (
 	);
 
 	soc_system_mm_interconnect_1_cmd_demux rsp_demux (
-		.clk                (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk                (clk_0_clk_clk),                                                      //       clk.clk
 		.reset              (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (hps_0_f2h_sdram0_data_rsp_width_adapter_src_ready),                  //      sink.ready
 		.sink_channel       (hps_0_f2h_sdram0_data_rsp_width_adapter_src_channel),                //          .channel
@@ -542,7 +542,7 @@ module soc_system_mm_interconnect_1 (
 	);
 
 	soc_system_mm_interconnect_1_rsp_mux rsp_mux (
-		.clk                 (hps_0_h2f_user2_clock_clk),                                 //       clk.clk
+		.clk                 (clk_0_clk_clk),                                             //       clk.clk
 		.reset               (address_span_extender_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (rsp_mux_src_ready),                                         //       src.ready
 		.src_valid           (rsp_mux_src_valid),                                         //          .valid
@@ -607,7 +607,7 @@ module soc_system_mm_interconnect_1 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) hps_0_f2h_sdram0_data_cmd_width_adapter (
-		.clk                  (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk                  (clk_0_clk_clk),                                                      //       clk.clk
 		.reset                (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.in_valid             (cmd_mux_src_valid),                                                  //      sink.valid
 		.in_channel           (cmd_mux_src_channel),                                                //          .channel
@@ -673,7 +673,7 @@ module soc_system_mm_interconnect_1 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) hps_0_f2h_sdram0_data_rsp_width_adapter (
-		.clk                  (hps_0_h2f_user2_clock_clk),                                          //       clk.clk
+		.clk                  (clk_0_clk_clk),                                                      //       clk.clk
 		.reset                (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.in_valid             (router_001_src_valid),                                               //      sink.valid
 		.in_channel           (router_001_src_channel),                                             //          .channel
@@ -708,7 +708,7 @@ module soc_system_mm_interconnect_1 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter (
-		.in_clk_0_clk   (hps_0_h2f_user2_clock_clk),                                          // in_clk_0.clk
+		.in_clk_0_clk   (clk_0_clk_clk),                                                      // in_clk_0.clk
 		.in_rst_0_reset (hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset), // in_rst_0.reset
 		.in_0_data      (hps_0_f2h_sdram0_data_agent_rdata_fifo_src_data),                    //     in_0.data
 		.in_0_valid     (hps_0_f2h_sdram0_data_agent_rdata_fifo_src_valid),                   //         .valid

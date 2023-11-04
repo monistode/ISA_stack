@@ -32,7 +32,6 @@ module soc_system (
 		output wire [63:0] sdram_read_data          //                .read_data
 	);
 
-	wire         hps_0_h2f_user2_clock_clk;                                              // hps_0:h2f_user2_clk -> [address_span_extender_0:clk, bridge_0:clk, hps_0:f2h_sdram0_clk, mm_interconnect_0:hps_0_h2f_user2_clock_clk, mm_interconnect_1:hps_0_h2f_user2_clock_clk, rst_controller:clk, rst_controller_001:clk]
 	wire  [63:0] bridge_0_avalon_master_readdata;                                        // mm_interconnect_0:bridge_0_avalon_master_readdata -> bridge_0:avalon_readdata
 	wire         bridge_0_avalon_master_waitrequest;                                     // mm_interconnect_0:bridge_0_avalon_master_waitrequest -> bridge_0:avalon_waitrequest
 	wire   [7:0] bridge_0_avalon_master_byteenable;                                      // bridge_0:avalon_byteenable -> mm_interconnect_0:bridge_0_avalon_master_byteenable
@@ -81,7 +80,7 @@ module soc_system (
 		.SUB_WINDOW_COUNT     (1),
 		.MASTER_ADDRESS_DEF   (64'b0000000000000000000000000000000000100000000000000000000000000000)
 	) address_span_extender_0 (
-		.clk                  (hps_0_h2f_user2_clock_clk),                                              //           clock.clk
+		.clk                  (clk_clk),                                                                //           clock.clk
 		.reset                (rst_controller_reset_out_reset),                                         //           reset.reset
 		.avs_s0_address       (mm_interconnect_0_address_span_extender_0_windowed_slave_address),       //  windowed_slave.address
 		.avs_s0_read          (mm_interconnect_0_address_span_extender_0_windowed_slave_read),          //                .read
@@ -110,7 +109,7 @@ module soc_system (
 	);
 
 	soc_system_bridge_0 bridge_0 (
-		.clk                (hps_0_h2f_user2_clock_clk),          //                clk.clk
+		.clk                (clk_clk),                            //                clk.clk
 		.reset              (rst_controller_reset_out_reset),     //              reset.reset
 		.avalon_readdata    (bridge_0_avalon_master_readdata),    //      avalon_master.readdata
 		.avalon_waitrequest (bridge_0_avalon_master_waitrequest), //                   .waitrequest
@@ -132,7 +131,6 @@ module soc_system (
 		.F2S_Width (0),
 		.S2F_Width (0)
 	) hps_0 (
-		.h2f_user2_clk            (hps_0_h2f_user2_clock_clk),                             //  h2f_user2_clock.clk
 		.mem_a                    (memory_mem_a),                                          //           memory.mem_a
 		.mem_ba                   (memory_mem_ba),                                         //                 .mem_ba
 		.mem_ck                   (memory_mem_ck),                                         //                 .mem_ck
@@ -150,7 +148,7 @@ module soc_system (
 		.mem_dm                   (memory_mem_dm),                                         //                 .mem_dm
 		.oct_rzqin                (memory_oct_rzqin),                                      //                 .oct_rzqin
 		.h2f_rst_n                (hps_0_h2f_reset_reset_n),                               //        h2f_reset.reset_n
-		.f2h_sdram0_clk           (hps_0_h2f_user2_clock_clk),                             // f2h_sdram0_clock.clk
+		.f2h_sdram0_clk           (clk_clk),                                               // f2h_sdram0_clock.clk
 		.f2h_sdram0_ADDRESS       (mm_interconnect_1_hps_0_f2h_sdram0_data_address),       //  f2h_sdram0_data.address
 		.f2h_sdram0_BURSTCOUNT    (mm_interconnect_1_hps_0_f2h_sdram0_data_burstcount),    //                 .burstcount
 		.f2h_sdram0_WAITREQUEST   (mm_interconnect_1_hps_0_f2h_sdram0_data_waitrequest),   //                 .waitrequest
@@ -163,7 +161,7 @@ module soc_system (
 	);
 
 	soc_system_mm_interconnect_0 mm_interconnect_0 (
-		.hps_0_h2f_user2_clock_clk                            (hps_0_h2f_user2_clock_clk),                                              //                  hps_0_h2f_user2_clock.clk
+		.clk_0_clk_clk                                        (clk_clk),                                                                //                              clk_0_clk.clk
 		.bridge_0_reset_reset_bridge_in_reset_reset           (rst_controller_reset_out_reset),                                         //   bridge_0_reset_reset_bridge_in_reset.reset
 		.bridge_0_avalon_master_address                       (bridge_0_avalon_master_address),                                         //                 bridge_0_avalon_master.address
 		.bridge_0_avalon_master_waitrequest                   (bridge_0_avalon_master_waitrequest),                                     //                                       .waitrequest
@@ -184,7 +182,7 @@ module soc_system (
 	);
 
 	soc_system_mm_interconnect_1 mm_interconnect_1 (
-		.hps_0_h2f_user2_clock_clk                                          (hps_0_h2f_user2_clock_clk),                             //                                        hps_0_h2f_user2_clock.clk
+		.clk_0_clk_clk                                                      (clk_clk),                                               //                                                    clk_0_clk.clk
 		.address_span_extender_0_reset_reset_bridge_in_reset_reset          (rst_controller_reset_out_reset),                        //          address_span_extender_0_reset_reset_bridge_in_reset.reset
 		.hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset (rst_controller_001_reset_out_reset),                    // hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset.reset
 		.address_span_extender_0_expanded_master_address                    (address_span_extender_0_expanded_master_address),       //                      address_span_extender_0_expanded_master.address
@@ -234,7 +232,7 @@ module soc_system (
 		.ADAPT_RESET_REQUEST       (0)
 	) rst_controller (
 		.reset_in0      (~reset_reset_n),                 // reset_in0.reset
-		.clk            (hps_0_h2f_user2_clock_clk),      //       clk.clk
+		.clk            (clk_clk),                        //       clk.clk
 		.reset_out      (rst_controller_reset_out_reset), // reset_out.reset
 		.reset_req      (),                               // (terminated)
 		.reset_req_in0  (1'b0),                           // (terminated)
@@ -297,7 +295,7 @@ module soc_system (
 		.ADAPT_RESET_REQUEST       (0)
 	) rst_controller_001 (
 		.reset_in0      (~hps_0_h2f_reset_reset_n),           // reset_in0.reset
-		.clk            (hps_0_h2f_user2_clock_clk),          //       clk.clk
+		.clk            (clk_clk),                            //       clk.clk
 		.reset_out      (rst_controller_001_reset_out_reset), // reset_out.reset
 		.reset_req      (),                                   // (terminated)
 		.reset_req_in0  (1'b0),                               // (terminated)

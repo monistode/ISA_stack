@@ -85,16 +85,15 @@ soc_system u_u0(
     .sdram_read_data(read_data)
 );
 
-localparam STATE_INIT           = 2'd0;
-localparam STATE_READ_PENDING   = 2'd1;
-localparam STATE_WRITE_PENDING  = 2'd2;
-
-logic [1:0] cur_state  = STATE_INIT;
-logic [1:0] next_state = STATE_INIT;
+enum int unsigned {
+    STATE_INIT = 0,
+    STATE_READ_PENDING = 1,
+    STATE_WRITE_PENDING = 2
+} cur_state, next_state;
 
 logic [63:0] data        = 64'd0;
 
-assign LED[7: 0] = data[7:0];
+assign LED[7: 2] = data[5:0];
 
 logic read_req  = 0;
 logic write_req = 0;
@@ -110,7 +109,7 @@ always_comb begin
 
         STATE_READ_PENDING: begin
             if (acknowledge) next_state = STATE_INIT;
-		  end
+          end
 
         STATE_WRITE_PENDING: begin
             if (acknowledge) next_state = STATE_INIT;
@@ -125,8 +124,8 @@ end
 always_comb begin
     read = 0;
     write = 0;
-	 byte_enable = 8'hFF;
-	 
+    byte_enable = 8'hFF;
+     
     case (cur_state)
         STATE_READ_PENDING: begin
             read     = 1;
@@ -141,40 +140,43 @@ always_comb begin
     endcase
 end
 
-always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n or posedge acknowledge) begin
+always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
     if (~hps_fpga_reset_n) begin
-		  read_req <= '0;
-	     write_req <= '0;
-		  cur_state <= STATE_INIT;
+          read_req <= '0;
+         write_req <= '0;
+          cur_state <= STATE_INIT;
     end else begin
-	     cur_state <= next_state;
+        cur_state <= next_state;
         case (cur_state)
             STATE_INIT: begin
-					 if (data[7:0] == 255) begin
-					     write_data[31:0] <= 'h12345678;
-						  write_req <= '1;
-						  read_req <= '0;
-						  data [7:0] <= 8'd0;
-					 end else begin
-					     read_req <= '1;
-						  write_req <= '0;
-					 end
+				     LED[1:0] <= 2'd0;
+                 if (data[7:0] == 255) begin
+                     write_data[31:0] <= 'h12345678;
+                     write_req <= '1;
+                     read_req <= '0;
+                     data [7:0] <= 8'd0;
+                 end else begin
+                     read_req <= 2'd1;
+                     write_req <= '0;
+                 end
             end
 
             STATE_READ_PENDING: begin
-					 if (acknowledge) data <= read_data;  
-				    read_req <= 0;
-	             write_req <= 0;
+				    LED[1:0] <= '1;
+                if (acknowledge) data <= read_data;  
+                    read_req <= 0;
+                 write_req <= 0;
             end
-				
-				STATE_WRITE_PENDING: begin
-				    read_req <= 0;
-	             write_req <= 0;
+
+            STATE_WRITE_PENDING: begin
+				    LED[1:0] <= 2'd2;
+                read_req <= 0;
+                write_req <= 0;
             end
 
             default: begin
-				    read_req <= 0;
-	             write_req <= 0;
+                read_req <= 0;
+                 write_req <= 0;
             end
         endcase
     end

@@ -7,7 +7,7 @@
 
 `timescale 1 ps / 1 ps
 module soc_system_mm_interconnect_0 (
-		input  wire        hps_0_h2f_user2_clock_clk,                            //                  hps_0_h2f_user2_clock.clk
+		input  wire        clk_0_clk_clk,                                        //                              clk_0_clk.clk
 		input  wire        bridge_0_reset_reset_bridge_in_reset_reset,           //   bridge_0_reset_reset_bridge_in_reset.reset
 		input  wire [15:0] bridge_0_avalon_master_address,                       //                 bridge_0_avalon_master.address
 		output wire        bridge_0_avalon_master_waitrequest,                   //                                       .waitrequest
@@ -156,7 +156,7 @@ module soc_system_mm_interconnect_0 (
 		.AV_LINEWRAPBURSTS           (0),
 		.AV_REGISTERINCOMINGSIGNALS  (0)
 	) bridge_0_avalon_master_translator (
-		.clk                    (hps_0_h2f_user2_clock_clk),                                                 //                       clk.clk
+		.clk                    (clk_0_clk_clk),                                                             //                       clk.clk
 		.reset                  (bridge_0_reset_reset_bridge_in_reset_reset),                                //                     reset.reset
 		.uav_address            (bridge_0_avalon_master_translator_avalon_universal_master_0_address),       // avalon_universal_master_0.address
 		.uav_burstcount         (bridge_0_avalon_master_translator_avalon_universal_master_0_burstcount),    //                          .burstcount
@@ -218,7 +218,7 @@ module soc_system_mm_interconnect_0 (
 		.AV_SETUP_WAIT_CYCLES           (0),
 		.AV_DATA_HOLD_CYCLES            (0)
 	) address_span_extender_0_windowed_slave_translator (
-		.clk                    (hps_0_h2f_user2_clock_clk),                                     //                      clk.clk
+		.clk                    (clk_0_clk_clk),                                                 //                      clk.clk
 		.reset                  (bridge_0_reset_reset_bridge_in_reset_reset),                    //                    reset.reset
 		.uav_address            (address_span_extender_0_windowed_slave_agent_m0_address),       // avalon_universal_slave_0.address
 		.uav_burstcount         (address_span_extender_0_windowed_slave_agent_m0_burstcount),    //                         .burstcount
@@ -308,7 +308,7 @@ module soc_system_mm_interconnect_0 (
 		.USE_READRESPONSE          (0),
 		.USE_WRITERESPONSE         (0)
 	) bridge_0_avalon_master_agent (
-		.clk                   (hps_0_h2f_user2_clock_clk),                                                 //       clk.clk
+		.clk                   (clk_0_clk_clk),                                                             //       clk.clk
 		.reset                 (bridge_0_reset_reset_bridge_in_reset_reset),                                // clk_reset.reset
 		.av_address            (bridge_0_avalon_master_translator_avalon_universal_master_0_address),       //        av.address
 		.av_write              (bridge_0_avalon_master_translator_avalon_universal_master_0_write),         //          .write
@@ -375,7 +375,7 @@ module soc_system_mm_interconnect_0 (
 		.USE_WRITERESPONSE         (0),
 		.ECC_ENABLE                (0)
 	) address_span_extender_0_windowed_slave_agent (
-		.clk                     (hps_0_h2f_user2_clock_clk),                                                  //             clk.clk
+		.clk                     (clk_0_clk_clk),                                                              //             clk.clk
 		.reset                   (bridge_0_reset_reset_bridge_in_reset_reset),                                 //       clk_reset.reset
 		.m0_address              (address_span_extender_0_windowed_slave_agent_m0_address),                    //              m0.address
 		.m0_burstcount           (address_span_extender_0_windowed_slave_agent_m0_burstcount),                 //                .burstcount
@@ -434,7 +434,7 @@ module soc_system_mm_interconnect_0 (
 		.USE_ALMOST_FULL_IF  (0),
 		.USE_ALMOST_EMPTY_IF (0)
 	) address_span_extender_0_windowed_slave_agent_rsp_fifo (
-		.clk               (hps_0_h2f_user2_clock_clk),                                               //       clk.clk
+		.clk               (clk_0_clk_clk),                                                           //       clk.clk
 		.reset             (bridge_0_reset_reset_bridge_in_reset_reset),                              // clk_reset.reset
 		.in_data           (address_span_extender_0_windowed_slave_agent_rf_source_data),             //        in.data
 		.in_valid          (address_span_extender_0_windowed_slave_agent_rf_source_valid),            //          .valid
@@ -467,7 +467,7 @@ module soc_system_mm_interconnect_0 (
 		.sink_data          (bridge_0_avalon_master_agent_cp_data),          //          .data
 		.sink_startofpacket (bridge_0_avalon_master_agent_cp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (bridge_0_avalon_master_agent_cp_endofpacket),   //          .endofpacket
-		.clk                (hps_0_h2f_user2_clock_clk),                     //       clk.clk
+		.clk                (clk_0_clk_clk),                                 //       clk.clk
 		.reset              (bridge_0_reset_reset_bridge_in_reset_reset),    // clk_reset.reset
 		.src_ready          (router_src_ready),                              //       src.ready
 		.src_valid          (router_src_valid),                              //          .valid
@@ -483,7 +483,7 @@ module soc_system_mm_interconnect_0 (
 		.sink_data          (address_span_extender_0_windowed_slave_agent_rp_data),          //          .data
 		.sink_startofpacket (address_span_extender_0_windowed_slave_agent_rp_startofpacket), //          .startofpacket
 		.sink_endofpacket   (address_span_extender_0_windowed_slave_agent_rp_endofpacket),   //          .endofpacket
-		.clk                (hps_0_h2f_user2_clock_clk),                                     //       clk.clk
+		.clk                (clk_0_clk_clk),                                                 //       clk.clk
 		.reset              (bridge_0_reset_reset_bridge_in_reset_reset),                    // clk_reset.reset
 		.src_ready          (router_001_src_ready),                                          //       src.ready
 		.src_valid          (router_001_src_valid),                                          //          .valid
@@ -527,7 +527,7 @@ module soc_system_mm_interconnect_0 (
 		.BURSTWRAP_CONST_VALUE     (1),
 		.ADAPTER_VERSION           ("13.1")
 	) address_span_extender_0_windowed_slave_burst_adapter (
-		.clk                   (hps_0_h2f_user2_clock_clk),                                                  //       cr0.clk
+		.clk                   (clk_0_clk_clk),                                                              //       cr0.clk
 		.reset                 (bridge_0_reset_reset_bridge_in_reset_reset),                                 // cr0_reset.reset
 		.sink0_valid           (address_span_extender_0_windowed_slave_cmd_width_adapter_src_valid),         //     sink0.valid
 		.sink0_data            (address_span_extender_0_windowed_slave_cmd_width_adapter_src_data),          //          .data
@@ -544,7 +544,7 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_cmd_demux cmd_demux (
-		.clk                (hps_0_h2f_user2_clock_clk),                  //       clk.clk
+		.clk                (clk_0_clk_clk),                              //       clk.clk
 		.reset              (bridge_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_src_ready),                           //      sink.ready
 		.sink_channel       (router_src_channel),                         //          .channel
@@ -561,7 +561,7 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_cmd_mux cmd_mux (
-		.clk                 (hps_0_h2f_user2_clock_clk),                  //       clk.clk
+		.clk                 (clk_0_clk_clk),                              //       clk.clk
 		.reset               (bridge_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (cmd_mux_src_ready),                          //       src.ready
 		.src_valid           (cmd_mux_src_valid),                          //          .valid
@@ -578,7 +578,7 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_cmd_demux rsp_demux (
-		.clk                (hps_0_h2f_user2_clock_clk),                                                  //       clk.clk
+		.clk                (clk_0_clk_clk),                                                              //       clk.clk
 		.reset              (bridge_0_reset_reset_bridge_in_reset_reset),                                 // clk_reset.reset
 		.sink_ready         (address_span_extender_0_windowed_slave_rsp_width_adapter_src_ready),         //      sink.ready
 		.sink_channel       (address_span_extender_0_windowed_slave_rsp_width_adapter_src_channel),       //          .channel
@@ -595,7 +595,7 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	soc_system_mm_interconnect_0_rsp_mux rsp_mux (
-		.clk                 (hps_0_h2f_user2_clock_clk),                  //       clk.clk
+		.clk                 (clk_0_clk_clk),                              //       clk.clk
 		.reset               (bridge_0_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.src_ready           (rsp_mux_src_ready),                          //       src.ready
 		.src_valid           (rsp_mux_src_valid),                          //          .valid
@@ -660,7 +660,7 @@ module soc_system_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) address_span_extender_0_windowed_slave_rsp_width_adapter (
-		.clk                  (hps_0_h2f_user2_clock_clk),                                                  //       clk.clk
+		.clk                  (clk_0_clk_clk),                                                              //       clk.clk
 		.reset                (bridge_0_reset_reset_bridge_in_reset_reset),                                 // clk_reset.reset
 		.in_valid             (router_001_src_valid),                                                       //      sink.valid
 		.in_channel           (router_001_src_channel),                                                     //          .channel
@@ -726,7 +726,7 @@ module soc_system_mm_interconnect_0 (
 		.PACKING                       (1),
 		.ENABLE_ADDRESS_ALIGNMENT      (0)
 	) address_span_extender_0_windowed_slave_cmd_width_adapter (
-		.clk                  (hps_0_h2f_user2_clock_clk),                                                  //       clk.clk
+		.clk                  (clk_0_clk_clk),                                                              //       clk.clk
 		.reset                (bridge_0_reset_reset_bridge_in_reset_reset),                                 // clk_reset.reset
 		.in_valid             (cmd_mux_src_valid),                                                          //      sink.valid
 		.in_channel           (cmd_mux_src_channel),                                                        //          .channel
@@ -761,7 +761,7 @@ module soc_system_mm_interconnect_0 (
 		.outUseReady     (1),
 		.outReadyLatency (0)
 	) avalon_st_adapter (
-		.in_clk_0_clk   (hps_0_h2f_user2_clock_clk),                                         // in_clk_0.clk
+		.in_clk_0_clk   (clk_0_clk_clk),                                                     // in_clk_0.clk
 		.in_rst_0_reset (bridge_0_reset_reset_bridge_in_reset_reset),                        // in_rst_0.reset
 		.in_0_data      (address_span_extender_0_windowed_slave_agent_rdata_fifo_src_data),  //     in_0.data
 		.in_0_valid     (address_span_extender_0_windowed_slave_agent_rdata_fifo_src_valid), //         .valid

@@ -11,7 +11,6 @@ module soc_system_hps_0 #(
 		parameter S2F_Width = 0
 	) (
 		output wire        h2f_rst_n,                //        h2f_reset.reset_n
-		output wire        h2f_user2_clk,            //  h2f_user2_clock.clk
 		input  wire [28:0] f2h_sdram0_ADDRESS,       //  f2h_sdram0_data.address
 		input  wire [7:0]  f2h_sdram0_BURSTCOUNT,    //                 .burstcount
 		output wire        f2h_sdram0_WAITREQUEST,   //                 .waitrequest
@@ -68,7 +67,6 @@ module soc_system_hps_0 #(
 
 	soc_system_hps_0_fpga_interfaces fpga_interfaces (
 		.h2f_rst_n                (h2f_rst_n),                //        h2f_reset.reset_n
-		.h2f_user2_clk            (h2f_user2_clk),            //  h2f_user2_clock.clk
 		.f2h_sdram0_ADDRESS       (f2h_sdram0_ADDRESS),       //  f2h_sdram0_data.address
 		.f2h_sdram0_BURSTCOUNT    (f2h_sdram0_BURSTCOUNT),    //                 .burstcount
 		.f2h_sdram0_WAITREQUEST   (f2h_sdram0_WAITREQUEST),   //                 .waitrequest

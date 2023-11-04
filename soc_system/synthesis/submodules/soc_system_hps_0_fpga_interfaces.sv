@@ -14,8 +14,6 @@
 module soc_system_hps_0_fpga_interfaces(
 // h2f_reset
   output wire [1 - 1 : 0 ] h2f_rst_n
-// h2f_user2_clock
- ,output wire [1 - 1 : 0 ] h2f_user2_clk
 // f2h_sdram0_data
  ,input wire [29 - 1 : 0 ] f2h_sdram0_ADDRESS
  ,input wire [8 - 1 : 0 ] f2h_sdram0_BURSTCOUNT
@@ -57,9 +55,6 @@ cyclonev_hps_interface_clocks_resets clocks_resets(
   })
 ,.f2h_cold_rst_req_n({
     1'b1 // 0:0
-  })
-,.h2f_user2_clk({
-    h2f_user2_clk[0:0] // 0:0
   })
 );
 
