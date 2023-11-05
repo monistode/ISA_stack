@@ -43,9 +43,9 @@ logic [15:0] address = 16'd0;
 logic read = 1'b0;
 logic write = 1'b0;
 logic acknowledge;
-logic [63:0] read_data;
-logic [63:0] write_data = 64'd0;
-logic [7:0] byte_enable = 8'b11111111;
+logic [31:0] read_data;
+logic [31:0] write_data = 64'd0;
+logic [3:0] byte_enable = 8'b11111111;
 
 // connection of internal logics
 assign fpga_clk_50 = FPGA_CLK1_50;
@@ -91,12 +91,13 @@ enum int unsigned {
     STATE_WRITE_PENDING = 2
 } cur_state, next_state;
 
-logic [63:0] data        = 64'd0;
+reg [63:0] data        = 64'd0;
 
-assign LED[7: 0] = data[7:0];
+assign LED[7: 0] = data[31:24];
 
 logic read_req  = 0;
 logic write_req = 0;
+logic [7:0] byte_en = 8'hFF;
 
 // State switch logic
 always_comb begin
@@ -124,7 +125,7 @@ end
 always_comb begin
     read = 0;
     write = 0;
-    byte_enable = 8'hFF;
+	 byte_enable = byte_en;
      
     case (cur_state)
         STATE_READ_PENDING: begin
@@ -150,13 +151,14 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
         case (cur_state)
             STATE_INIT: begin
                  if (data[7:0] == 255) begin
-                     write_data[63:32] <= data[63:32];
-							write_data[31:24] <= data[23:16] + data[15:8];
-							write_data[23:0]  <= data[23:0];
+					  		byte_en <= 4'b1000;
+                     write_data[31:24] <= data[23:16] + data[15:8];
+							address <= 16'd4;
                      write_req <= '1;
                      read_req <= '0;
-                     data [7:0] <= 8'd0;
                  end else begin
+					      address <= 16'd0;
+							byte_en <= 4'b1111;
                      read_req <= 2'd1;
                      write_req <= '0;
                  end
@@ -164,18 +166,19 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
 
             STATE_READ_PENDING: begin
                 if (acknowledge) data <= read_data;  
-                    read_req <= 0;
-                 write_req <= 0;
+                read_req <= 0;
+                write_req <= 0;
             end
 
             STATE_WRITE_PENDING: begin
                 read_req <= 0;
                 write_req <= 0;
+					 data[7:0] <= '0;
             end
 
             default: begin
                 read_req <= 0;
-                 write_req <= 0;
+                write_req <= 0;
             end
         endcase
     end

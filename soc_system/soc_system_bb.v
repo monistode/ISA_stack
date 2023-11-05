@@ -47,10 +47,10 @@ module soc_system (
 	input		memory_oct_rzqin;
 	input		reset_reset_n;
 	input	[15:0]	sdram_address;
-	input	[7:0]	sdram_byte_enable;
+	input	[3:0]	sdram_byte_enable;
 	input		sdram_read;
 	input		sdram_write;
-	input	[63:0]	sdram_write_data;
+	input	[31:0]	sdram_write_data;
 	output		sdram_acknowledge;
-	output	[63:0]	sdram_read_data;
+	output	[31:0]	sdram_read_data;
 endmodule

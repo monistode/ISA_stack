@@ -89,12 +89,12 @@
    version="22.1"
    enabled="1">
   <parameter name="BURSTCOUNT_WIDTH" value="1" />
-  <parameter name="DATA_WIDTH" value="8" />
+  <parameter name="DATA_WIDTH" value="32" />
   <parameter name="ENABLE_SLAVE_PORT" value="false" />
   <parameter name="MASTER_ADDRESS_DEF" value="536870912" />
   <parameter name="MASTER_ADDRESS_WIDTH" value="32" />
   <parameter name="MAX_PENDING_READS" value="1" />
-  <parameter name="SLAVE_ADDRESS_WIDTH" value="16" />
+  <parameter name="SLAVE_ADDRESS_WIDTH" value="14" />
   <parameter name="SUB_WINDOW_COUNT" value="1" />
  </module>
  <module
@@ -106,7 +106,7 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
   <parameter name="addr_size" value="64" />
   <parameter name="addr_size_multiplier" value="Kbytes" />
-  <parameter name="data_size" value="64" />
+  <parameter name="data_size" value="32" />
  </module>
  <module name="clk_0" kind="clock_source" version="22.1" enabled="1">
   <parameter name="clockFrequency" value="400000000" />

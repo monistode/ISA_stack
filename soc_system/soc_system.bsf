@@ -55,8 +55,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 0 168)
 		(input)
-		(text "sdram_byte_enable[7..0]" (rect 0 0 100 12)(font "Arial" (font_size 8)))
-		(text "sdram_byte_enable[7..0]" (rect 4 157 142 168)(font "Arial" (font_size 8)))
+		(text "sdram_byte_enable[3..0]" (rect 0 0 100 12)(font "Arial" (font_size 8)))
+		(text "sdram_byte_enable[3..0]" (rect 4 157 142 168)(font "Arial" (font_size 8)))
 		(line (pt 0 168)(pt 128 168)(line_width 3))
 	)
 	(port
@@ -76,8 +76,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 0 216)
 		(input)
-		(text "sdram_write_data[63..0]" (rect 0 0 96 12)(font "Arial" (font_size 8)))
-		(text "sdram_write_data[63..0]" (rect 4 205 142 216)(font "Arial" (font_size 8)))
+		(text "sdram_write_data[31..0]" (rect 0 0 95 12)(font "Arial" (font_size 8)))
+		(text "sdram_write_data[31..0]" (rect 4 205 142 216)(font "Arial" (font_size 8)))
 		(line (pt 0 216)(pt 128 216)(line_width 3))
 	)
 	(port
@@ -181,8 +181,8 @@ https://fpgasoftware.intel.com/eula.
 	(port
 		(pt 0 248)
 		(output)
-		(text "sdram_read_data[63..0]" (rect 0 0 96 12)(font "Arial" (font_size 8)))
-		(text "sdram_read_data[63..0]" (rect 4 237 136 248)(font "Arial" (font_size 8)))
+		(text "sdram_read_data[31..0]" (rect 0 0 95 12)(font "Arial" (font_size 8)))
+		(text "sdram_read_data[31..0]" (rect 4 237 136 248)(font "Arial" (font_size 8)))
 		(line (pt 0 248)(pt 128 248)(line_width 3))
 	)
 	(port

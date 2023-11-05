@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 22.1 922 (Future versions may contain additional information.) -->
- <!-- 2023.11.04.10:18:43 -->
+ <!-- 2023.11.04.18:44:34 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1699085914</value>
+  <value>1699116264</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -108,7 +108,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.BYTEENABLE_WIDTH</name>
-   <value>1</value>
+   <value>4</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.CNTL_ADDRESS_WIDTH</name>
@@ -116,7 +116,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DATA_WIDTH</name>
-   <value>8</value>
+   <value>32</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.MASTER_ADDRESS_WIDTH</name>
@@ -124,7 +124,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.MAX_BURST_BYTES</name>
-   <value>1</value>
+   <value>4</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.MAX_BURST_WORDS</name>
@@ -132,11 +132,11 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SLAVE_ADDRESS_SHIFT</name>
-   <value>0</value>
+   <value>2</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SLAVE_ADDRESS_WIDTH</name>
-   <value>16</value>
+   <value>14</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SUB_WINDOW_COUNT</name>
@@ -144,7 +144,7 @@ the requested settings for a module instance. -->
   </assignment>
   <parameter name="DATA_WIDTH">
    <type>int</type>
-   <value>8</value>
+   <value>32</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -152,7 +152,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="BYTEENABLE_WIDTH">
    <type>int</type>
-   <value>1</value>
+   <value>4</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -160,7 +160,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="DATA_WORD_WIDTH">
    <type>int</type>
-   <value>1</value>
+   <value>4</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -184,7 +184,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_WIDTH">
    <type>int</type>
-   <value>16</value>
+   <value>14</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -200,7 +200,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_SHIFT">
    <type>int</type>
-   <value>0</value>
+   <value>2</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -224,7 +224,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="MAX_BURST_BYTES">
    <type>int</type>
-   <value>1</value>
+   <value>4</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -721,7 +721,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_address</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>14</width>
     <role>address</role>
    </port>
    <port>
@@ -733,7 +733,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_readdata</name>
     <direction>Output</direction>
-    <width>8</width>
+    <width>32</width>
     <role>readdata</role>
    </port>
    <port>
@@ -745,7 +745,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_writedata</name>
     <direction>Input</direction>
-    <width>8</width>
+    <width>32</width>
     <role>writedata</role>
    </port>
    <port>
@@ -763,7 +763,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_byteenable</name>
     <direction>Input</direction>
-    <width>1</width>
+    <width>4</width>
     <role>byteenable</role>
    </port>
    <port>
@@ -1056,7 +1056,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avm_m0_readdata</name>
     <direction>Input</direction>
-    <width>8</width>
+    <width>32</width>
     <role>readdata</role>
    </port>
    <port>
@@ -1068,7 +1068,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avm_m0_writedata</name>
     <direction>Output</direction>
-    <width>8</width>
+    <width>32</width>
     <role>writedata</role>
    </port>
    <port>
@@ -1080,7 +1080,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avm_m0_byteenable</name>
     <direction>Output</direction>
-    <width>1</width>
+    <width>4</width>
     <role>byteenable</role>
    </port>
    <port>
@@ -1124,7 +1124,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="data_size">
    <type>int</type>
-   <value>64</value>
+   <value>32</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1537,7 +1537,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_readdata</name>
     <direction>Input</direction>
-    <width>64</width>
+    <width>32</width>
     <role>readdata</role>
    </port>
    <port>
@@ -1549,7 +1549,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_byteenable</name>
     <direction>Output</direction>
-    <width>8</width>
+    <width>4</width>
     <role>byteenable</role>
    </port>
    <port>
@@ -1567,7 +1567,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_writedata</name>
     <direction>Output</direction>
-    <width>64</width>
+    <width>32</width>
     <role>writedata</role>
    </port>
    <port>
@@ -1640,7 +1640,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>byte_enable</name>
     <direction>Input</direction>
-    <width>8</width>
+    <width>4</width>
     <role>export</role>
    </port>
    <port>
@@ -1658,7 +1658,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>write_data</name>
     <direction>Input</direction>
-    <width>64</width>
+    <width>32</width>
     <role>export</role>
    </port>
    <port>
@@ -1670,7 +1670,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>read_data</name>
     <direction>Output</direction>
-    <width>64</width>
+    <width>32</width>
     <role>export</role>
    </port>
   </interface>
