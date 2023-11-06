@@ -93,7 +93,7 @@ enum int unsigned {
 
 reg [63:0] data        = 64'd0;
 
-assign LED[7: 0] = data[31:24];
+assign LED[7: 0] = data[7:0];
 
 logic read_req  = 0;
 logic write_req = 0;
@@ -129,11 +129,11 @@ always_comb begin
      
     case (cur_state)
         STATE_READ_PENDING: begin
-            read     = 1;
+            read = 1;
         end
 
         STATE_WRITE_PENDING: begin
-            write     = 1;
+            write = 1;
         end
 
         default: begin
@@ -143,9 +143,9 @@ end
 
 always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
     if (~hps_fpga_reset_n) begin
-          read_req <= '0;
+         read_req <= '0;
          write_req <= '0;
-          cur_state <= STATE_INIT;
+         cur_state <= STATE_INIT;
     end else begin
         cur_state <= next_state;
         case (cur_state)
