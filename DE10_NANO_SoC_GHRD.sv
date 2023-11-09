@@ -109,7 +109,7 @@ always_comb begin
 
         STATE_READ_PENDING: begin
             if (acknowledge) next_mem_state = STATE_INIT;
-          end
+        end
 
         STATE_WRITE_PENDING: begin
             if (acknowledge) next_mem_state = STATE_INIT;
@@ -163,10 +163,7 @@ reg [31:0] data        = 31'd0;
 logic prev_pressed = 0;
 logic cycle_done = 1;
 
-assign LED[0] = prev_pressed;
-assign LED[1] = ~debounced_keys[1];
-assign LED[2] = cycle_done;
-assign LED[7: 3] = data[4: 0];
+assign LED[7: 0] = data[7: 0];
 
 always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
     if (~hps_fpga_reset_n) begin
@@ -174,9 +171,9 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
         write_req <= '0;
         prev_pressed <= debounced_keys[1];
         cycle_done <= 1;
-    end else if (~SW[3] | (prev_pressed & ~debounced_keys[1]) | ~cycle_done) begin
+    end else if (~SW[3] | (prev_pressed & ~debounced_keys[1] & cycle_done) | ~cycle_done) begin
         prev_pressed <= debounced_keys[1];
-        prev_pressed <= (cur_mem_state != STATE_INIT);
+        cycle_done <= (next_mem_state == STATE_INIT);
         case (cur_mem_state)
             STATE_INIT: begin
                 if (data[7:0] == 255) begin
@@ -202,10 +199,12 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
             STATE_WRITE_PENDING: begin
                 read_req <= 0;
                 write_req <= 0;
-                data[7:0] <= '0;
+                data[7:0] <= data[23:16] + data[15:8];
             end
 
             default: begin
+                read_req <= 0;
+                write_req <= 0;
             end
         endcase
     end else prev_pressed <= debounced_keys[1];
