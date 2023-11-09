@@ -55,14 +55,14 @@ preplace inst soc_system.clk_0 -pg 1 -lvl 1 -y 30
 preplace inst soc_system.hps_0.f2s_periph_ref_clk -pg 1
 preplace inst soc_system.hps_0.fpga_interfaces -pg 1
 preplace inst soc_system.hps_0.axi_sdram -pg 1
-preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)clk_0.clk_in_reset,(SLAVE)soc_system.reset) 1 0 1 NJ
-preplace netloc FAN_OUT<net_container>soc_system</net_container>(SLAVE)address_span_extender_0.reset,(SLAVE)bridge_0.reset,(MASTER)clk_0.clk_reset) 1 1 3 260 90 NJ 90 900
+preplace netloc FAN_OUT<net_container>soc_system</net_container>(SLAVE)bridge_0.reset,(SLAVE)address_span_extender_0.reset,(MASTER)clk_0.clk_reset) 1 1 3 260 90 NJ 90 900
 preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)hps_0.memory,(SLAVE)soc_system.memory) 1 0 5 NJ 250 NJ 250 NJ 250 NJ 250 NJ
 preplace netloc POINT_TO_POINT<net_container>soc_system</net_container>(MASTER)bridge_0.avalon_master,(SLAVE)address_span_extender_0.windowed_slave) 1 2 2 NJ 130 N
-preplace netloc FAN_OUT<net_container>soc_system</net_container>(MASTER)clk_0.clk,(SLAVE)bridge_0.clk,(SLAVE)address_span_extender_0.clock,(SLAVE)hps_0.f2h_sdram0_clock) 1 1 4 280 70 NJ 70 920 70 1240
-preplace netloc POINT_TO_POINT<net_container>soc_system</net_container>(MASTER)address_span_extender_0.expanded_master,(SLAVE)hps_0.f2h_sdram0_data) 1 4 1 1220
-preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)soc_system.sdram,(SLAVE)bridge_0.external_interface) 1 0 2 NJ 130 NJ
+preplace netloc FAN_OUT<net_container>soc_system</net_container>(MASTER)clk_0.clk,(SLAVE)hps_0.f2h_sdram0_clock,(SLAVE)bridge_0.clk,(SLAVE)address_span_extender_0.clock) 1 1 4 280 70 NJ 70 920 170 1220
+preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)soc_system.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)bridge_0.external_interface,(SLAVE)soc_system.sdram) 1 0 2 NJ 130 NJ
 preplace netloc EXPORT<net_container>soc_system</net_container>(MASTER)soc_system.hps_0_h2f_reset,(MASTER)hps_0.h2f_reset) 1 5 1 N
 preplace netloc EXPORT<net_container>soc_system</net_container>(SLAVE)clk_0.clk_in,(SLAVE)soc_system.clk) 1 0 1 NJ
+preplace netloc POINT_TO_POINT<net_container>soc_system</net_container>(SLAVE)hps_0.f2h_sdram0_data,(MASTER)address_span_extender_0.expanded_master) 1 4 1 1240
 levelinfo -pg 1 0 50 1650
 levelinfo -hier soc_system 60 90 380 880 1050 1380 1520
