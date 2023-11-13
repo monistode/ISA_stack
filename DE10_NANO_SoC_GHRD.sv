@@ -144,6 +144,54 @@ always_comb begin
 end
 
 //=======================================================
+//  CPU state enum and regs / wires
+//=======================================================
+
+logic fetch_done    = 0;
+logic decode_done   = 0;
+logic op_fetch_done = 0;
+logic exec_done     = 0;
+logic write_done    = 0;
+
+enum int unsigned {
+    CPU_STATE_INSTR_FETCH         = 1,
+    CPU_STATE_INSTR_DECODE        = 2,
+    CPU_STATE_INSTR_OPERAND_FETCH = 3,
+    CPU_STATE_INSTR_EXEC          = 4,
+    CPU_STATE_INSTR_WRITEBACK     = 5
+} cur_cpu_state, next_cpu_state;
+
+// State switch logic
+always_comb begin
+    next_cpu_state = cur_cpu_state;
+    case (cur_cpu_state)
+        CPU_STATE_INSTR_FETCH: begin
+            if (fetch_done) next_cpu_state = CPU_STATE_INSTR_DECODE;
+        end
+
+        CPU_STATE_INSTR_DECODE: begin
+            if (decode_done) next_cpu_state = CPU_STATE_INSTR_OPERAND_FETCH;
+        end
+
+        CPU_STATE_INSTR_OPERAND_FETCH: begin
+            if (op_fetch_done) next_cpu_state = CPU_STATE_INSTR_EXEC;
+        end
+
+        CPU_STATE_INSTR_EXEC: begin
+            if (exec_done) next_cpu_state = CPU_STATE_INSTR_WRITEBACK;
+        end
+
+        CPU_STATE_INSTR_WRITEBACK: begin
+            if (write_done) next_cpu_state = CPU_STATE_INSTR_FETCH;
+        end
+
+        default: begin
+            next_cpu_state = CPU_STATE_INSTR_FETCH;
+        end
+    endcase
+end
+
+//=======================================================
 //  CPU single-step button setup.
 //=======================================================
 
@@ -166,15 +214,15 @@ reg   prev_pressed = 0;
 //  CPU instruction decoder / registers
 //=======================================================
 
-// parameter int unsigned MEM_STACK_BASE = 256;
-// parameter int unsigned REG_STACK_BASE = 1024;
-// reg [5:0]  cur_instruction = 6'd0;
-// reg [15:0] PC = REG_STACK_BASE;
-// reg [15:0] FR = 16'd0;
-// reg [15:0] TOS           = MEM_STACK_BASE;
-// reg [15:0] CUR_MEM_STACK = MEM_STACK_BASE;
-// reg [15:0] SP            = REG_STACK_BASE;
-// reg [15:0] CUR_REG_STACK = MEM_STACK_BASE;
+parameter int unsigned MEM_STACK_BASE = 256;
+parameter int unsigned REG_STACK_BASE = 1024;
+parameter int unsigned STATIC_ARGS_BASE = 1536;
+
+reg [5:0]  cur_instruction = 6'd0;
+reg [15:0] PC = 0;
+reg [15:0] FR = 16'd0;
+reg [15:0] TOS           = MEM_STACK_BASE;
+reg [15:0] SP            = REG_STACK_BASE;
 
 // CPU variables
 reg was_written = 0;
@@ -195,8 +243,6 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
         if (~debounced_keys[0]) is_halted <= 0;
 
         prev_pressed <= debounced_keys[1];
-        cycle_done <= (next_mem_state == MEM_STATE_INIT);
-
         case (cur_mem_state)
             MEM_STATE_INIT: begin
             end
@@ -221,25 +267,66 @@ always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
         //=======================================================
         //  The instruction decoder itself. Finally )
         //=======================================================
-
-
-        if (~is_halted &
+        if (cur_mem_state == MEM_STATE_INIT & ~is_halted &
             (~SW[3] | (prev_pressed & ~debounced_keys[1] & cycle_done) | ~cycle_done)) begin
-            if (cur_mem_state == MEM_STATE_INIT) begin
-                if (data[7:0] == 255) begin
-                    byte_enable <= 4'b0001;
-                    write_data[7:0] <= data[23:16] + data[15:8];
-                    data[7:0] <= data[23:16] + data[15:8];
-                    address <= 16'd0;
-                    write_req <= '1;
-                    read_req <= '0;
-                    is_halted <= '1;
-                end else begin
-                    address <= 16'd0;
-                    byte_enable <= 4'b1111;
-                    read_req <= '1;
-                    write_req <= '0;
-                end
+
+            if (cur_cpu_state == CPU_STATE_INSTR_FETCH) begin
+                // 5 CPU instrictuions fit into 4 bytes 32 = 6 * 5 + 2
+                address <= REG_STACK_BASE + PC % 5;
+                read_req <= 1;
+                PC <= PC + '1;
+                cycle_done <= '0;
+
+                fetch_done    <= '1;
+                decode_done   <= '0;
+                op_fetch_done <= '0;
+                exec_done     <= '0;
+                write_done    <= '0;
+            end else if (cur_cpu_state == CPU_STATE_INSTR_DECODE) begin
+                cur_instruction <= data[5 * (PC % 5) + 5 -: 6];
+                fetch_done    <= '0;
+                decode_done   <= '1;
+                op_fetch_done <= '0;
+                exec_done     <= '0;
+                write_done    <= '0;
+            end else begin
+                case (cur_instruction)
+                    6'b000000: begin
+                        case (cur_cpu_state)
+                            CPU_STATE_INSTR_OPERAND_FETCH: begin
+                                fetch_done    <= '0;
+                                decode_done   <= '0;
+                                op_fetch_done <= '1;
+                                exec_done     <= '0;
+                                write_done    <= '0;
+                            end
+
+                            CPU_STATE_INSTR_EXEC: begin
+                                fetch_done    <= '0;
+                                decode_done   <= '0;
+                                op_fetch_done <= '0;
+                                exec_done     <= '1;
+                                write_done    <= '0;
+                            end
+
+                            CPU_STATE_INSTR_WRITEBACK: begin
+                                fetch_done    <= '0;
+                                decode_done   <= '0;
+                                op_fetch_done <= '0;
+                                exec_done     <= '1;
+                                write_done    <= '1;
+
+                                is_halted <= '1;
+                                cycle_done <= '0;
+                            end
+
+                            default: begin
+                            end
+                        endcase
+                    end
+                    default: begin
+                    end
+                endcase
             end
         end
     end
