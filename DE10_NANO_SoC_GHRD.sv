@@ -47,9 +47,9 @@ logic [15:0] address = 16'd0;
 logic read = 1'b0;
 logic write = 1'b0;
 logic acknowledge;
-logic [31:0] read_data;
+logic [31:0] read_data = 32'd0;
 logic [31:0] write_data = 32'd0;
-logic [3:0] byte_enable = 8'b11111111;
+logic [3:0] byte_enable = 4'b1111;
 
 // connection of internal logics
 assign fpga_clk_50 = FPGA_CLK1_50;
