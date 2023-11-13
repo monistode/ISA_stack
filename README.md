@@ -1,6 +1,4 @@
-# De10Nano template
+# RISC stack ISA implementation
 
-This is a very extensive template, a stripped down version of `Demonstrations/SoC_FPGA/DE10_NANO_SoC_GHRD` from
-[here](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=205&No=1046&PartNo=4)
-
-You do not have to understand every bit of this project to start working on it, most of it is just busywork to set up all the peripherals anyways.
+This is an implementation of a [RISC stack ISA from here](https://github.com/monistode/ISA-docs),
+initiated from [this template](https://github.com/monistode/de10nano_template).
