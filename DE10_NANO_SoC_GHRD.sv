@@ -146,50 +146,13 @@ end
 //=======================================================
 //  CPU state enum and regs / wires
 //=======================================================
-
-logic fetch_done    = 0;
-logic decode_done   = 0;
-logic op_fetch_done = 0;
-logic exec_done     = 0;
-logic write_done    = 0;
-
 enum int unsigned {
     CPU_STATE_INSTR_FETCH         = 1,
     CPU_STATE_INSTR_DECODE        = 2,
     CPU_STATE_INSTR_OPERAND_FETCH = 3,
     CPU_STATE_INSTR_EXEC          = 4,
     CPU_STATE_INSTR_WRITEBACK     = 5
-} cur_cpu_state, next_cpu_state;
-
-// State switch logic
-always_comb begin
-    next_cpu_state = cur_cpu_state;
-    case (cur_cpu_state)
-        CPU_STATE_INSTR_FETCH: begin
-            if (fetch_done) next_cpu_state = CPU_STATE_INSTR_DECODE;
-        end
-
-        CPU_STATE_INSTR_DECODE: begin
-            if (decode_done) next_cpu_state = CPU_STATE_INSTR_OPERAND_FETCH;
-        end
-
-        CPU_STATE_INSTR_OPERAND_FETCH: begin
-            if (op_fetch_done) next_cpu_state = CPU_STATE_INSTR_EXEC;
-        end
-
-        CPU_STATE_INSTR_EXEC: begin
-            if (exec_done) next_cpu_state = CPU_STATE_INSTR_WRITEBACK;
-        end
-
-        CPU_STATE_INSTR_WRITEBACK: begin
-            if (write_done) next_cpu_state = CPU_STATE_INSTR_FETCH;
-        end
-
-        default: begin
-            next_cpu_state = CPU_STATE_INSTR_FETCH;
-        end
-    endcase
-end
+} cur_cpu_state;
 
 //=======================================================
 //  CPU single-step button setup.
@@ -214,273 +177,352 @@ reg   prev_pressed = 0;
 //  CPU instruction decoder / registers
 //=======================================================
 
-parameter MEM_STACK_BASE = 16'd256;
-parameter REG_STACK_BASE = 16'd1024;
-parameter STATIC_ARGS_BASE = 16'd1536;
+parameter MEM_STACK_BASE = 16'h100;
+parameter REG_STACK_BASE = 16'h3FE;
+parameter PROG_START = 16'h400;
 
 reg [5:0]  cur_instruction = 6'd0;
 reg [15:0] PC = 0;
+reg [15:0] IMM_ADDR = 0;
 reg [15:0] FR = 16'd0;
-reg [15:0] TOS           = MEM_STACK_BASE;
-reg [15:0] SP            = REG_STACK_BASE;
+reg [15:0] TOS = MEM_STACK_BASE;
+reg [15:0] SP  = REG_STACK_BASE;
 
 // CPU variables
-reg [31:0] data = 31'd0;
-assign LED[7: 0] = data[7: 0];
+reg [31:0] data = 32'd0;
+reg [15:0] tmp_address = 16'd0;
+assign LED[7: 0] = PC[7:0];
 
 always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
-    if (~hps_fpga_reset_n) begin
-        cur_mem_state <= MEM_STATE_INIT;
-        cur_cpu_state <= CPU_STATE_INSTR_FETCH;
-        read_req <= '0;
-        write_req <= '0;
-        prev_pressed <= debounced_keys[1];
-        cycle_done <= 1;
+if (~hps_fpga_reset_n) begin
+    cur_mem_state <= MEM_STATE_INIT;
+    cur_cpu_state <= CPU_STATE_INSTR_FETCH;
+    cycle_done <= 1;
 
-        cur_instruction <= 6'd0;
-        PC <= 0;
-        FR <= 16'd0;
-        TOS <= MEM_STACK_BASE;
-        SP <= REG_STACK_BASE;
-    end else begin
-        // Lotsa logic, sorry
-        cur_mem_state <= next_mem_state;
-        cur_cpu_state <= next_cpu_state;
+    read_req <= '0;
+    write_req <= '0;
+    prev_pressed <= debounced_keys[1];
 
-        if (~debounced_keys[0]) is_halted <= 0;
+    cur_instruction <= 6'd0;
+    PC <= 0;
+    FR <= 16'd0;
+    TOS <= MEM_STACK_BASE;
+    SP <= REG_STACK_BASE;
+end else begin
+    // Lotsa logic, sorry
+    cur_mem_state <= next_mem_state;
 
-        prev_pressed <= debounced_keys[1];
-        case (cur_mem_state)
-            MEM_STATE_INIT: begin
+    if (~debounced_keys[0]) is_halted <= 0;
+
+    prev_pressed <= debounced_keys[1];
+    case (cur_mem_state)
+        MEM_STATE_INIT: begin
+        end
+
+        MEM_STATE_READ_PENDING: begin
+            if (acknowledge) data <= read_data;
+            read_req <= 0;
+            write_req <= 0;
+        end
+
+        MEM_STATE_WRITE_PENDING: begin
+            read_req <= 0;
+            write_req <= 0;
+        end
+
+        default: begin
+            read_req <= 0;
+            write_req <= 0;
+        end
+    endcase
+
+    //=======================================================
+    //  The instruction decoder itself. Finally )
+    //=======================================================
+    if (cur_mem_state == MEM_STATE_INIT & ~is_halted & // Only do cpu stuff when memory is not read/written to
+        ~read_req & ~write_req & // Same as line one
+        (~SW[3] | (prev_pressed & ~debounced_keys[1] & cycle_done) | ~cycle_done) // Button checker
+        ) begin
+
+        cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK;
+
+        case (cur_cpu_state)
+            CPU_STATE_INSTR_FETCH: begin
+                cur_cpu_state <= CPU_STATE_INSTR_DECODE;
             end
 
-            MEM_STATE_READ_PENDING: begin
-                if (acknowledge) data <= read_data;
-                read_req <= 0;
-                write_req <= 0;
+            CPU_STATE_INSTR_DECODE: begin
+                cur_cpu_state <= CPU_STATE_INSTR_OPERAND_FETCH;
             end
 
-            MEM_STATE_WRITE_PENDING: begin
-                read_req <= 0;
-                write_req <= 0;
+            CPU_STATE_INSTR_OPERAND_FETCH: begin
+                cur_cpu_state <= CPU_STATE_INSTR_EXEC;
+            end
+
+            CPU_STATE_INSTR_EXEC: begin
+                cur_cpu_state <= CPU_STATE_INSTR_WRITEBACK;
+            end
+
+            CPU_STATE_INSTR_WRITEBACK: begin
+                cur_cpu_state <= CPU_STATE_INSTR_FETCH;
             end
 
             default: begin
-                read_req <= 0;
-                write_req <= 0;
+                cur_cpu_state <= CPU_STATE_INSTR_FETCH;
             end
         endcase
 
-        //=======================================================
-        //  The instruction decoder itself. Finally )
-        //=======================================================
-        if (cur_mem_state == MEM_STATE_INIT & ~is_halted &
-            (~SW[3] | (prev_pressed & ~debounced_keys[1] & cycle_done) | ~cycle_done)) begin
-
-            if (cur_cpu_state == CPU_STATE_INSTR_FETCH) begin
-                // 4 CPU instrictuions fit into 4 bytes, could be 5, but naaah
-                byte_enable <= 4'b1111;
-                address <= REG_STACK_BASE + PC[15:2];
-                read_req <= 1;
-                PC <= PC + '1;
-                cycle_done <= '0;
-
-                fetch_done    <= '1;
-                decode_done   <= '0;
-                op_fetch_done <= '0;
-                exec_done     <= '0;
-                write_done    <= '0;
-            end else if (cur_cpu_state == CPU_STATE_INSTR_DECODE) begin
-                cur_instruction <= data[PC[1:0] * 8 + 5 -: 6];
-                fetch_done    <= '0;
-                decode_done   <= '1;
-                op_fetch_done <= '0;
-                exec_done     <= '0;
-                write_done    <= '0;
-            end else begin
-                case (cur_instruction)
-                    // HALT
-                    6'b000000: begin
-                        case (cur_cpu_state)
-                            CPU_STATE_INSTR_OPERAND_FETCH: begin
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '1;
-                                exec_done     <= '0;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_EXEC: begin
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_WRITEBACK: begin
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '1;
-
-                                is_halted <= '1;
-                                cycle_done <= '1;
-                            end
-
-                            default: begin
-                            end
-                        endcase
-                    end
-
-                    // LOAD
-                    6'b000001: begin
-                        case (cur_cpu_state)
-                            CPU_STATE_INSTR_OPERAND_FETCH: begin
-                                byte_enable <= 4'b1111;
-                                address <= {SP[15:2], 2'b00};
-                                read_req <= 1;
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '1;
-                                exec_done     <= '0;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_EXEC: begin
-                                if (SP[1]) begin
-                                    byte_enable <= 4'b1100;
-                                    write_data[31:16] <= data[31:16];
-                                    address <= {SP[15:2], 2'b00};
-                                end else begin
-                                    byte_enable <= 4'b0011;
-                                    write_data[15:0] <= data[15:0];
-                                    address <= {SP[15:2], 2'b00};
-                                end
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_WRITEBACK: begin
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '1;
-                                cycle_done <= '1;
-                            end
-
-                            default: begin
-                            end
-                        endcase
-                    end
-
-                    // LOAD %FR
-                    6'b000010: begin
-                        case (cur_cpu_state)
-                            CPU_STATE_INSTR_OPERAND_FETCH: begin
-                                SP <= SP + 16'd2;
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '1;
-                                exec_done     <= '0;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_EXEC: begin
-                                if (SP[1]) begin
-                                    byte_enable <= 4'b1100;
-                                    write_data[31:16] <= FR;
-                                    address <= {SP[15:2], 2'b00};
-                                end else begin
-                                    byte_enable <= 4'b0011;
-                                    write_data[15:0] <= FR;
-                                    address <= {SP[15:2], 2'b00};
-                                end
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_WRITEBACK: begin
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '1;
-                                cycle_done <= '1;
-                            end
-
-                            default: begin
-                            end
-                        endcase
-                    end
-
-                    // LOAD %FR
-                    6'b000010: begin
-                        case (cur_cpu_state)
-                            CPU_STATE_INSTR_OPERAND_FETCH: begin
-                                address <= STATIC_ARGS_BASE + PC[15:2];
-                                byte_enable <= 4'b1111;
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '1;
-                                exec_done     <= '0;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_EXEC: begin
-                                SP <= SP + 16'd2;
-
-                                read_req <= 1;
-                                byte_enable <= 4'b1111;
-                                address <= data[PC[1] * 16 + 15 -: 16];
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '0;
-                            end
-
-                            CPU_STATE_INSTR_WRITEBACK: begin
-                                if (SP[1]) begin
-                                    byte_enable <= 4'b1100;
-                                    write_data[31:16] <= data[address[1] * 16 + 15 -: 16];
-                                end else begin
-                                    byte_enable <= 4'b0011;
-                                    write_data[15:0] <= data[address[1] * 16 + 15 -: 16];
-                                end
-
-                                fetch_done    <= '0;
-                                decode_done   <= '0;
-                                op_fetch_done <= '0;
-                                exec_done     <= '1;
-                                write_done    <= '1;
-                                cycle_done <= '1;
-                            end
-
-                            default: begin
-                            end
-                        endcase
+        if (cur_cpu_state == CPU_STATE_INSTR_FETCH) begin
+            // 4 CPU instrictuions fit into 4 bytes, could be 5, but naaah
+            byte_enable <= 4'b1111;
+            address <= PROG_START + {PC[15:2], 2'b00};
+            IMM_ADDR <= PC + 16'd1;
+            PC <= PC + 1;
+            read_req <= 1;
+        end else if (cur_cpu_state == CPU_STATE_INSTR_DECODE) begin
+            case (PC[1:0])
+                2'b00: begin
+                    cur_instruction <= data[29:24];
+                    if (data[29]) PC <= PC + 16'd2;
+                end
+                2'b01: begin
+                    cur_instruction <= data[5:0];
+                    if (data[5]) PC <= PC + 16'd2;
+                end
+                2'b10: begin
+                    cur_instruction <= data[13:8];
+                    if (data[13]) PC <= PC + 16'd2;
+                end
+                2'b11: begin
+                    cur_instruction <= data[21:16];
+                    if (data[21]) PC <= PC + 16'd2;
+                end
+                default: begin
+                end
+            endcase
+        end else begin
+            case (cur_instruction)
+            // HALT
+            6'b000000: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        is_halted <= '1;
                     end
 
                     default: begin
                     end
                 endcase
             end
+
+            // LOAD
+            6'b000001: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        byte_enable <= 4'b1111;
+                        address <= {SP[15:2], 2'b00};
+                        read_req <= 1;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        byte_enable <= 4'b1111;
+
+                        if (SP[1]) begin
+                            address <= data[31:16];
+                            tmp_address <= data[31:16];
+                        end
+                        else begin
+                            address <= data[15:0];
+                            tmp_address <= data[15:0];
+                        end
+
+                        read_req <= 1;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        if (tmp_address[1]) write_data <= {data[31:16], data[31:16]};
+                        else write_data <= {data[15:0], data[15:0]};
+
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+
+                        address <= {SP[15:2], 2'b00};
+
+                        write_req <= '1;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // LOAD %FR
+            6'b000010: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        SP <= SP - 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        address <= {SP[15:2], 2'b00};
+                        write_data <= {FR, FR};
+
+                        write_req <= '1;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // LOAD [mem]
+            6'b100000: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        address <= PROG_START + {IMM_ADDR[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                        read_req <= '1;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        SP <= SP - 16'd2;
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        case (IMM_ADDR[1:0])
+                            2'b00: begin
+                                address <= data[15:0];
+                                tmp_address <= data[15:0];
+                            end
+
+                            2'b01: begin
+                                address <= data[23:8];
+                                tmp_address <= data[23:8];
+                            end
+
+                            2'b10: begin
+                                address <= data[31:16];
+                                tmp_address <= data[31:16];
+                            end
+
+                            default: begin
+                            end
+                        endcase
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        if (tmp_address[1]) write_data <= {data[31:16], data[31:16]};
+                        else write_data <= {data[15:0], data[15:0]};
+
+                        address <= {SP[15:2], 2'b00};
+                        write_req <= '1;
+                        if (SP[1]) begin
+                            byte_enable <= 4'b1100;
+                        end else begin
+                            byte_enable <= 4'b0011;
+                        end
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // STORE
+            6'b000100: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) begin
+                            tmp_address <= data[15:0];
+                        end else begin
+                            tmp_address <= data[31:16];
+                        end
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        write_data <= {tmp_address, tmp_address};
+                        if (SP[1]) begin
+                            address <= {data[15:2], 2'b00};
+                            if (data[1]) byte_enable <= 4'b1100;
+                            else byte_enable <= 4'b0011;
+                        end else begin
+                            address <= {data[31:18], 2'b00};
+                            if (data[17]) byte_enable <= 4'b1100;
+                            else byte_enable <= 4'b0011;
+                        end
+                        write_req <= '1;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // STORE $imm
+            6'b100001: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) begin
+                            tmp_address <= data[15:0];
+                        end else begin
+                            tmp_address <= data[31:16];
+                        end
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= PROG_START + {IMM_ADDR[15:2], 2'b00};
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        if (tmp_address[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+
+                        case (IMM_ADDR[1:0])
+                            2'b00: write_data <= {data[15:0], data[15:0]};
+                            2'b01: write_data <= {data[23:8], data[23:8]};
+                            2'b10: write_data <= {data[31:16], data[31:16]};
+                            default: begin
+                            end
+                        endcase
+
+                        write_req <= 1;
+                        address <= {tmp_address[15:2], 2'b00};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            default: begin
+            end
+            endcase
         end
     end
+end
 end
 
 endmodule
