@@ -25,7 +25,19 @@ module soc_system (
 	sdram_write,
 	sdram_write_data,
 	sdram_acknowledge,
-	sdram_read_data);	
+	sdram_read_data,
+	uart_0_external_connection_rxd,
+	uart_0_external_connection_txd,
+	uart_bridge_s0_waitrequest,
+	uart_bridge_s0_readdata,
+	uart_bridge_s0_readdatavalid,
+	uart_bridge_s0_burstcount,
+	uart_bridge_s0_writedata,
+	uart_bridge_s0_address,
+	uart_bridge_s0_write,
+	uart_bridge_s0_read,
+	uart_bridge_s0_byteenable,
+	uart_bridge_s0_debugaccess);	
 
 	input		clk_clk;
 	output		hps_0_h2f_reset_reset_n;
@@ -53,4 +65,16 @@ module soc_system (
 	input	[31:0]	sdram_write_data;
 	output		sdram_acknowledge;
 	output	[31:0]	sdram_read_data;
+	input		uart_0_external_connection_rxd;
+	output		uart_0_external_connection_txd;
+	output		uart_bridge_s0_waitrequest;
+	output	[7:0]	uart_bridge_s0_readdata;
+	output		uart_bridge_s0_readdatavalid;
+	input	[0:0]	uart_bridge_s0_burstcount;
+	input	[7:0]	uart_bridge_s0_writedata;
+	input	[4:0]	uart_bridge_s0_address;
+	input		uart_bridge_s0_write;
+	input		uart_bridge_s0_read;
+	input	[0:0]	uart_bridge_s0_byteenable;
+	input		uart_bridge_s0_debugaccess;
 endmodule

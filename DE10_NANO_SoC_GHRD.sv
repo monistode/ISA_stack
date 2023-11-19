@@ -27,14 +27,17 @@ module DE10_NANO_SoC_GHRD(
     input  logic             HPS_DDR3_RZQ,
     output logic             HPS_DDR3_WE_N,
 
+    //////////// GPIO //////////
+    inout  logic  [35:0]     GPIO_D,
+
     //////////// LED //////////
     output logic  [ 7: 0]    LED,
 
     //////////// SWITCHES //////////
     input  logic  [ 3: 0]    SW,
      
-     //////////// SWITCHES //////////
-     input  logic  [ 1: 0]    KEY
+    //////////// SWITCHES //////////
+    input  logic  [ 1: 0]    KEY
 );
 
 //=======================================================
@@ -43,6 +46,9 @@ module DE10_NANO_SoC_GHRD(
 logic hps_fpga_reset_n;
 logic fpga_clk_50;
 
+//=======================================================
+//  RAM variables
+//=======================================================
 logic [15:0] address = 16'd0;
 logic read = 1'b0;
 logic write = 1'b0;
@@ -50,6 +56,17 @@ logic acknowledge;
 logic [31:0] read_data = 32'd0;
 logic [31:0] write_data = 32'd0;
 logic [3:0] byte_enable = 4'b1111;
+
+//=======================================================
+//  UART variables
+//=======================================================
+logic [2:0] uart_addr = 0;
+logic [7:0] uart_wdata;
+logic [7:0] uart_rdata;
+logic uart_rvalid;
+logic uart_read = 0;
+logic uart_write = 0;
+logic uart_waitrequest = 1;
 
 // connection of internal logics
 assign fpga_clk_50 = FPGA_CLK1_50;
@@ -86,7 +103,19 @@ soc_system u_u0(
     .sdram_write(write),             //                .write
     .sdram_write_data(write_data),        //                .write_data
     .sdram_acknowledge(acknowledge),       //                .acknowledge
-    .sdram_read_data(read_data)
+    .sdram_read_data(read_data),
+
+    .uart_0_external_connection_rxd(GPIO_D[0]), // uart_0_external_connection.rxd
+    .uart_0_external_connection_txd(GPIO_D[1]), //                           .txd
+    .uart_bridge_s0_waitrequest(uart_waitrequest),
+    .uart_bridge_s0_readdata(uart_rdata[7:0]),        //                           .readdata
+    .uart_bridge_s0_readdatavalid(uart_rdvalid),   //                           .readdatavalid
+    .uart_bridge_s0_burstcount(1'b1),      //                           .burstcount
+    .uart_bridge_s0_writedata(uart_wdata),       //                           .writedata
+    .uart_bridge_s0_address(uart_addr),         //                           .address
+    .uart_bridge_s0_write(uart_write),           //                           .write
+    .uart_bridge_s0_read(uart_read),            //                           .read
+    .uart_bridge_s0_byteenable(1'b1)      //                           .byteenable
 );
 
 //=======================================================
@@ -220,6 +249,7 @@ end else begin
     cur_mem_state <= next_mem_state;
 
     if (~debounced_keys[0]) is_halted <= 0;
+    if (~debounced_keys[0] & SW[1]) PC <= 0;
 
     prev_pressed <= debounced_keys[1];
     case (cur_mem_state)
@@ -246,7 +276,9 @@ end else begin
     //=======================================================
     //  The instruction decoder itself. Finally )
     //=======================================================
-    if (cur_mem_state == MEM_STATE_INIT & ~is_halted & // Only do cpu stuff when memory is not read/written to
+    if (
+        ~SW[1] & // If SW[1] is on, we wait for button 0 to set PC to 0
+        cur_mem_state == MEM_STATE_INIT & ~is_halted & // Only do cpu stuff when memory is not read/written to
         ~read_req & ~write_req & // Same as line one
         (~SW[3] | (prev_pressed & ~debounced_keys[1] & cycle_done) | ~cycle_done) // Button checker
         ) begin
@@ -1610,7 +1642,7 @@ end else begin
                     end
 
                     CPU_STATE_INSTR_OPERAND_FETCH_1: begin
-                        if (SP[1]) tmp_word <= data[15:0];
+                        if (~SP[1]) tmp_word <= data[15:0];
                         else tmp_word <= data[31:16];
 
                         read_req <= 1;
@@ -1625,8 +1657,8 @@ end else begin
                     end
 
                     CPU_STATE_INSTR_EXEC_1: begin
-                        if (tmp_address == tmp_word) cur_imm = 16'hFFFF;
-                        else cur_imm = 16'h0;
+                        if (tmp_address == tmp_word) cur_imm <= 16'hFFFF;
+                        else cur_imm <= 16'h0;
                     end
 
                     CPU_STATE_INSTR_WRITEBACK: begin
@@ -1642,6 +1674,7 @@ end else begin
                 endcase
             end
 
+            // TODO: Fix this. Why does it not work anyways?
             // CMPE $IMM
             6'b100110: begin
                 case (cur_cpu_state)
@@ -1649,18 +1682,17 @@ end else begin
                         read_req <= 1;
                         byte_enable <= 4'b1111;
                         address <= MEM_BASE + {SP[15:2], 2'b00};
-                        SP <= SP + 16'd2;
                         byte_enable <= 4'b1111;
                     end
 
                     CPU_STATE_INSTR_OPERAND_FETCH_1: begin
-                        if (SP[1]) tmp_word <= data[15:0];
-                        else tmp_word <= data[31:16];
+                        if (SP[1]) tmp_word <= data[31:16];
+                        else tmp_word <= data[15:0];
                     end
 
                     CPU_STATE_INSTR_EXEC_1: begin
-                        if (cur_imm == tmp_word) cur_imm = 16'hFFFF;
-                        else cur_imm = 16'h0;
+                        if (cur_imm == tmp_word) cur_imm <= 16'hFFFF;
+                        else cur_imm <= 16'h0;
                     end
 
                     CPU_STATE_INSTR_WRITEBACK: begin
@@ -1703,8 +1735,8 @@ end else begin
                     end
 
                     CPU_STATE_INSTR_EXEC_1: begin
-                        if (tmp_address > tmp_word) cur_imm = 16'hFFFF;
-                        else cur_imm = 16'h0;
+                        if (tmp_address > tmp_word) cur_imm <= 16'hFFFF;
+                        else cur_imm <= 16'h0;
                     end
 
                     CPU_STATE_INSTR_WRITEBACK: begin
@@ -1727,18 +1759,17 @@ end else begin
                         read_req <= 1;
                         byte_enable <= 4'b1111;
                         address <= MEM_BASE + {SP[15:2], 2'b00};
-                        SP <= SP + 16'd2;
                         byte_enable <= 4'b1111;
                     end
 
                     CPU_STATE_INSTR_OPERAND_FETCH_1: begin
-                        if (SP[1]) tmp_word <= data[15:0];
-                        else tmp_word <= data[31:16];
+                        if (SP[1]) tmp_word <= data[31:16];
+                        else tmp_word <= data[15:0];
                     end
 
                     CPU_STATE_INSTR_EXEC_1: begin
-                        if (cur_imm > tmp_word) cur_imm = 16'hFFFF;
-                        else cur_imm = 16'h0;
+                        if (cur_imm > tmp_word) cur_imm <= 16'hFFFF;
+                        else cur_imm <= 16'h0;
                     end
 
                     CPU_STATE_INSTR_WRITEBACK: begin
@@ -1816,8 +1847,8 @@ end else begin
                 endcase
             end
 
-            // IC $IMM
-            6'b101000: begin
+            // JC $IMM
+            6'b101001: begin
                 case (cur_cpu_state)
                     CPU_STATE_INSTR_OPERAND_FETCH: begin
                         if (FR[0]) PC <= PC + cur_imm;
