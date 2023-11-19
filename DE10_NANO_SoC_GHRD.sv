@@ -392,7 +392,7 @@ end else begin
                     CPU_STATE_INSTR_OPERAND_FETCH: begin
                         byte_enable <= 4'b1111;
                         address <= 16'h200;
-                        write_data <= {cur_imm, FR};
+                        write_data <= {cur_imm, PC};
                         write_req <= 1;
                         byte_enable <= 4'b1111;
                     end
@@ -1259,6 +1259,568 @@ end else begin
                         if (SP[1]) byte_enable <= 4'b1100;
                         else byte_enable <= 4'b0011;
                         write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // AND
+            6'b010010: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) tmp_address <= data[31:16];
+                        else tmp_address <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (tmp_address == 0) cur_imm <= 0;
+                        else cur_imm <= tmp_word & tmp_address;
+                        FR <= 16'd0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[0] <= 0;
+                        FR[2] <= tmp_word[15] ^ tmp_address[15];
+                        FR[3] <= (tmp_word == 0) | (tmp_address == 0);
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // OR
+            6'b010011: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) tmp_address <= data[31:16];
+                        else tmp_address <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (tmp_address == 0) cur_imm <= 0;
+                        else cur_imm <= tmp_word | tmp_address;
+                        FR <= 16'd0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[0] <= 0;
+                        FR[2] <= tmp_word[15] ^ tmp_address[15];
+                        FR[3] <= (tmp_word == 0) | (tmp_address == 0);
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // XOR
+            6'b010100: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) tmp_address <= data[31:16];
+                        else tmp_address <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (tmp_address == 0) cur_imm <= 0;
+                        else cur_imm <= tmp_word ^ tmp_address;
+                        FR <= 16'd0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[0] <= 0;
+                        FR[2] <= tmp_word[15] ^ tmp_address[15];
+                        FR[3] <= (tmp_word == 0) | (tmp_address == 0);
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // NOT
+            6'b010100: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= ~data[15:0];
+                        else tmp_word <= ~data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[1] <= tmp_word == 0;
+                        FR[3] <= tmp_word == 0;
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{tmp_word}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // LSH
+            6'b100011: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        tmp_address <= tmp_word << cur_imm;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[1] <= {tmp_word >> (16 - cur_imm)} != 0;
+                        FR[3] <= tmp_address == 0;
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{tmp_address}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // RSH
+            6'b100100: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        tmp_address <= tmp_word >> cur_imm;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        FR[1] <= {tmp_word << (16 - cur_imm)} != 0;
+                        FR[3] <= tmp_address == 0;
+
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{tmp_address}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CALL $NUM
+            6'b100101: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        TOS <= TOS + 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (TOS[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{PC}};
+                        address <= MEM_BASE + {TOS[15:2], 2'b00};
+                        write_req <= 1;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        PC <= PC + cur_imm;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CALL
+            6'b010110: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        TOS <= TOS + 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (TOS[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{PC}};
+                        address <= MEM_BASE + {TOS[15:2], 2'b00};
+                        write_req <= 1;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        read_req <= '1;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                        SP <= SP - 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        PC <= PC + tmp_word;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // RET
+            6'b010111: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {TOS[15:2], 2'b00};
+                        TOS <= TOS - 16'd2;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (TOS[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        PC <= tmp_word;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CMPE
+            6'b011000: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) tmp_address <= data[31:16];
+                        else tmp_address <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (tmp_address == tmp_word) cur_imm = 16'hFFFF;
+                        else cur_imm = 16'h0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CMPE $IMM
+            6'b100110: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (cur_imm == tmp_word) cur_imm = 16'hFFFF;
+                        else cur_imm = 16'h0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{tmp_address}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CMPB
+            6'b011001: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_EXEC: begin
+                        if (SP[1]) tmp_address <= data[31:16];
+                        else tmp_address <= data[15:0];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (tmp_address > tmp_word) cur_imm = 16'hFFFF;
+                        else cur_imm = 16'h0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{cur_imm}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // CMPB $IMM
+            6'b100111: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_EXEC_1: begin
+                        if (cur_imm > tmp_word) cur_imm = 16'hFFFF;
+                        else cur_imm = 16'h0;
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        write_req <= 1;
+                        if (SP[1]) byte_enable <= 4'b1100;
+                        else byte_enable <= 4'b0011;
+                        write_data <= {2{tmp_address}};
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // JMP
+            6'b011010: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        PC <= PC + tmp_word;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // JMP $IMM
+            6'b101000: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        PC <= PC + cur_imm;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // JC
+            6'b011011: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+
+                    CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                        if (SP[1]) tmp_word <= data[15:0];
+                        else tmp_word <= data[31:16];
+                    end
+
+                    CPU_STATE_INSTR_WRITEBACK: begin
+                        if (FR[0]) PC <= PC + tmp_word;
+                    end
+
+                    default: begin
+                    end
+                endcase
+            end
+
+            // IC $IMM
+            6'b101000: begin
+                case (cur_cpu_state)
+                    CPU_STATE_INSTR_OPERAND_FETCH: begin
+                        if (FR[0]) PC <= PC + cur_imm;
                     end
 
                     default: begin
