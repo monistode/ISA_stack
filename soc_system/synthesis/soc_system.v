@@ -4,44 +4,42 @@
 
 `timescale 1 ps / 1 ps
 module soc_system (
-		input  wire        clk_clk,                        //                        clk.clk
-		output wire        hps_0_h2f_reset_reset_n,        //            hps_0_h2f_reset.reset_n
-		output wire [14:0] memory_mem_a,                   //                     memory.mem_a
-		output wire [2:0]  memory_mem_ba,                  //                           .mem_ba
-		output wire        memory_mem_ck,                  //                           .mem_ck
-		output wire        memory_mem_ck_n,                //                           .mem_ck_n
-		output wire        memory_mem_cke,                 //                           .mem_cke
-		output wire        memory_mem_cs_n,                //                           .mem_cs_n
-		output wire        memory_mem_ras_n,               //                           .mem_ras_n
-		output wire        memory_mem_cas_n,               //                           .mem_cas_n
-		output wire        memory_mem_we_n,                //                           .mem_we_n
-		output wire        memory_mem_reset_n,             //                           .mem_reset_n
-		inout  wire [31:0] memory_mem_dq,                  //                           .mem_dq
-		inout  wire [3:0]  memory_mem_dqs,                 //                           .mem_dqs
-		inout  wire [3:0]  memory_mem_dqs_n,               //                           .mem_dqs_n
-		output wire        memory_mem_odt,                 //                           .mem_odt
-		output wire [3:0]  memory_mem_dm,                  //                           .mem_dm
-		input  wire        memory_oct_rzqin,               //                           .oct_rzqin
-		input  wire        reset_reset_n,                  //                      reset.reset_n
-		input  wire [15:0] sdram_address,                  //                      sdram.address
-		input  wire [3:0]  sdram_byte_enable,              //                           .byte_enable
-		input  wire        sdram_read,                     //                           .read
-		input  wire        sdram_write,                    //                           .write
-		input  wire [31:0] sdram_write_data,               //                           .write_data
-		output wire        sdram_acknowledge,              //                           .acknowledge
-		output wire [31:0] sdram_read_data,                //                           .read_data
-		input  wire        uart_0_external_connection_rxd, // uart_0_external_connection.rxd
-		output wire        uart_0_external_connection_txd, //                           .txd
-		output wire        uart_bridge_s0_waitrequest,     //             uart_bridge_s0.waitrequest
-		output wire [7:0]  uart_bridge_s0_readdata,        //                           .readdata
-		output wire        uart_bridge_s0_readdatavalid,   //                           .readdatavalid
-		input  wire [0:0]  uart_bridge_s0_burstcount,      //                           .burstcount
-		input  wire [7:0]  uart_bridge_s0_writedata,       //                           .writedata
-		input  wire [4:0]  uart_bridge_s0_address,         //                           .address
-		input  wire        uart_bridge_s0_write,           //                           .write
-		input  wire        uart_bridge_s0_read,            //                           .read
-		input  wire [0:0]  uart_bridge_s0_byteenable,      //                           .byteenable
-		input  wire        uart_bridge_s0_debugaccess      //                           .debugaccess
+		input  wire        clk_clk,                 //             clk.clk
+		output wire        hps_0_h2f_reset_reset_n, // hps_0_h2f_reset.reset_n
+		output wire [14:0] memory_mem_a,            //          memory.mem_a
+		output wire [2:0]  memory_mem_ba,           //                .mem_ba
+		output wire        memory_mem_ck,           //                .mem_ck
+		output wire        memory_mem_ck_n,         //                .mem_ck_n
+		output wire        memory_mem_cke,          //                .mem_cke
+		output wire        memory_mem_cs_n,         //                .mem_cs_n
+		output wire        memory_mem_ras_n,        //                .mem_ras_n
+		output wire        memory_mem_cas_n,        //                .mem_cas_n
+		output wire        memory_mem_we_n,         //                .mem_we_n
+		output wire        memory_mem_reset_n,      //                .mem_reset_n
+		inout  wire [31:0] memory_mem_dq,           //                .mem_dq
+		inout  wire [3:0]  memory_mem_dqs,          //                .mem_dqs
+		inout  wire [3:0]  memory_mem_dqs_n,        //                .mem_dqs_n
+		output wire        memory_mem_odt,          //                .mem_odt
+		output wire [3:0]  memory_mem_dm,           //                .mem_dm
+		input  wire        memory_oct_rzqin,        //                .oct_rzqin
+		input  wire        reset_reset_n,           //           reset.reset_n
+		input  wire [15:0] sdram_address,           //           sdram.address
+		input  wire [3:0]  sdram_byte_enable,       //                .byte_enable
+		input  wire        sdram_read,              //                .read
+		input  wire        sdram_write,             //                .write
+		input  wire [31:0] sdram_write_data,        //                .write_data
+		output wire        sdram_acknowledge,       //                .acknowledge
+		output wire [31:0] sdram_read_data,         //                .read_data
+		input  wire        uart_RXD,                //            uart.RXD
+		output wire        uart_TXD,                //                .TXD
+		input  wire [7:0]  uart_in_data,            //         uart_in.data
+		input  wire        uart_in_error,           //                .error
+		input  wire        uart_in_valid,           //                .valid
+		output wire        uart_in_ready,           //                .ready
+		input  wire        uart_out_ready,          //        uart_out.ready
+		output wire [7:0]  uart_out_data,           //                .data
+		output wire        uart_out_error,          //                .error
+		output wire        uart_out_valid           //                .valid
 	);
 
 	wire  [31:0] bridge_0_avalon_master_readdata;                                        // mm_interconnect_0:bridge_0_avalon_master_readdata -> bridge_0:avalon_readdata
@@ -78,24 +76,7 @@ module soc_system (
 	wire         mm_interconnect_1_hps_0_f2h_sdram0_data_write;                          // mm_interconnect_1:hps_0_f2h_sdram0_data_write -> hps_0:f2h_sdram0_WRITE
 	wire  [63:0] mm_interconnect_1_hps_0_f2h_sdram0_data_writedata;                      // mm_interconnect_1:hps_0_f2h_sdram0_data_writedata -> hps_0:f2h_sdram0_WRITEDATA
 	wire   [7:0] mm_interconnect_1_hps_0_f2h_sdram0_data_burstcount;                     // mm_interconnect_1:hps_0_f2h_sdram0_data_burstcount -> hps_0:f2h_sdram0_BURSTCOUNT
-	wire         mm_bridge_0_m0_waitrequest;                                             // mm_interconnect_2:mm_bridge_0_m0_waitrequest -> mm_bridge_0:m0_waitrequest
-	wire   [7:0] mm_bridge_0_m0_readdata;                                                // mm_interconnect_2:mm_bridge_0_m0_readdata -> mm_bridge_0:m0_readdata
-	wire         mm_bridge_0_m0_debugaccess;                                             // mm_bridge_0:m0_debugaccess -> mm_interconnect_2:mm_bridge_0_m0_debugaccess
-	wire   [4:0] mm_bridge_0_m0_address;                                                 // mm_bridge_0:m0_address -> mm_interconnect_2:mm_bridge_0_m0_address
-	wire         mm_bridge_0_m0_read;                                                    // mm_bridge_0:m0_read -> mm_interconnect_2:mm_bridge_0_m0_read
-	wire   [0:0] mm_bridge_0_m0_byteenable;                                              // mm_bridge_0:m0_byteenable -> mm_interconnect_2:mm_bridge_0_m0_byteenable
-	wire         mm_bridge_0_m0_readdatavalid;                                           // mm_interconnect_2:mm_bridge_0_m0_readdatavalid -> mm_bridge_0:m0_readdatavalid
-	wire   [7:0] mm_bridge_0_m0_writedata;                                               // mm_bridge_0:m0_writedata -> mm_interconnect_2:mm_bridge_0_m0_writedata
-	wire         mm_bridge_0_m0_write;                                                   // mm_bridge_0:m0_write -> mm_interconnect_2:mm_bridge_0_m0_write
-	wire   [0:0] mm_bridge_0_m0_burstcount;                                              // mm_bridge_0:m0_burstcount -> mm_interconnect_2:mm_bridge_0_m0_burstcount
-	wire         mm_interconnect_2_uart_0_s1_chipselect;                                 // mm_interconnect_2:uart_0_s1_chipselect -> uart_0:chipselect
-	wire  [15:0] mm_interconnect_2_uart_0_s1_readdata;                                   // uart_0:readdata -> mm_interconnect_2:uart_0_s1_readdata
-	wire   [2:0] mm_interconnect_2_uart_0_s1_address;                                    // mm_interconnect_2:uart_0_s1_address -> uart_0:address
-	wire         mm_interconnect_2_uart_0_s1_read;                                       // mm_interconnect_2:uart_0_s1_read -> uart_0:read_n
-	wire         mm_interconnect_2_uart_0_s1_begintransfer;                              // mm_interconnect_2:uart_0_s1_begintransfer -> uart_0:begintransfer
-	wire         mm_interconnect_2_uart_0_s1_write;                                      // mm_interconnect_2:uart_0_s1_write -> uart_0:write_n
-	wire  [15:0] mm_interconnect_2_uart_0_s1_writedata;                                  // mm_interconnect_2:uart_0_s1_writedata -> uart_0:writedata
-	wire         rst_controller_reset_out_reset;                                         // rst_controller:reset_out -> [address_span_extender_0:reset, bridge_0:reset, mm_bridge_0:reset, mm_interconnect_0:bridge_0_reset_reset_bridge_in_reset_reset, mm_interconnect_1:address_span_extender_0_reset_reset_bridge_in_reset_reset, mm_interconnect_2:mm_bridge_0_reset_reset_bridge_in_reset_reset, uart_0:reset_n]
+	wire         rst_controller_reset_out_reset;                                         // rst_controller:reset_out -> [address_span_extender_0:reset, bridge_0:reset, mm_interconnect_0:bridge_0_reset_reset_bridge_in_reset_reset, mm_interconnect_1:address_span_extender_0_reset_reset_bridge_in_reset_reset, rs232_0:reset]
 	wire         rst_controller_001_reset_out_reset;                                     // rst_controller_001:reset_out -> mm_interconnect_1:hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset
 
 	altera_address_span_extender #(
@@ -189,53 +170,19 @@ module soc_system (
 		.f2h_sdram0_WRITE         (mm_interconnect_1_hps_0_f2h_sdram0_data_write)          //                 .write
 	);
 
-	altera_avalon_mm_bridge #(
-		.DATA_WIDTH        (8),
-		.SYMBOL_WIDTH      (8),
-		.HDL_ADDR_WIDTH    (5),
-		.BURSTCOUNT_WIDTH  (1),
-		.PIPELINE_COMMAND  (1),
-		.PIPELINE_RESPONSE (1)
-	) mm_bridge_0 (
-		.clk              (clk_clk),                        //   clk.clk
-		.reset            (rst_controller_reset_out_reset), // reset.reset
-		.s0_waitrequest   (uart_bridge_s0_waitrequest),     //    s0.waitrequest
-		.s0_readdata      (uart_bridge_s0_readdata),        //      .readdata
-		.s0_readdatavalid (uart_bridge_s0_readdatavalid),   //      .readdatavalid
-		.s0_burstcount    (uart_bridge_s0_burstcount),      //      .burstcount
-		.s0_writedata     (uart_bridge_s0_writedata),       //      .writedata
-		.s0_address       (uart_bridge_s0_address),         //      .address
-		.s0_write         (uart_bridge_s0_write),           //      .write
-		.s0_read          (uart_bridge_s0_read),            //      .read
-		.s0_byteenable    (uart_bridge_s0_byteenable),      //      .byteenable
-		.s0_debugaccess   (uart_bridge_s0_debugaccess),     //      .debugaccess
-		.m0_waitrequest   (mm_bridge_0_m0_waitrequest),     //    m0.waitrequest
-		.m0_readdata      (mm_bridge_0_m0_readdata),        //      .readdata
-		.m0_readdatavalid (mm_bridge_0_m0_readdatavalid),   //      .readdatavalid
-		.m0_burstcount    (mm_bridge_0_m0_burstcount),      //      .burstcount
-		.m0_writedata     (mm_bridge_0_m0_writedata),       //      .writedata
-		.m0_address       (mm_bridge_0_m0_address),         //      .address
-		.m0_write         (mm_bridge_0_m0_write),           //      .write
-		.m0_read          (mm_bridge_0_m0_read),            //      .read
-		.m0_byteenable    (mm_bridge_0_m0_byteenable),      //      .byteenable
-		.m0_debugaccess   (mm_bridge_0_m0_debugaccess),     //      .debugaccess
-		.s0_response      (),                               // (terminated)
-		.m0_response      (2'b00)                           // (terminated)
-	);
-
-	soc_system_uart_0 uart_0 (
-		.clk           (clk_clk),                                   //                 clk.clk
-		.reset_n       (~rst_controller_reset_out_reset),           //               reset.reset_n
-		.address       (mm_interconnect_2_uart_0_s1_address),       //                  s1.address
-		.begintransfer (mm_interconnect_2_uart_0_s1_begintransfer), //                    .begintransfer
-		.chipselect    (mm_interconnect_2_uart_0_s1_chipselect),    //                    .chipselect
-		.read_n        (~mm_interconnect_2_uart_0_s1_read),         //                    .read_n
-		.write_n       (~mm_interconnect_2_uart_0_s1_write),        //                    .write_n
-		.writedata     (mm_interconnect_2_uart_0_s1_writedata),     //                    .writedata
-		.readdata      (mm_interconnect_2_uart_0_s1_readdata),      //                    .readdata
-		.rxd           (uart_0_external_connection_rxd),            // external_connection.export
-		.txd           (uart_0_external_connection_txd),            //                    .export
-		.irq           ()                                           //                 irq.irq
+	soc_system_rs232_0 rs232_0 (
+		.clk             (clk_clk),                        //                        clk.clk
+		.reset           (rst_controller_reset_out_reset), //                      reset.reset
+		.from_uart_ready (uart_out_ready),                 // avalon_data_receive_source.ready
+		.from_uart_data  (uart_out_data),                  //                           .data
+		.from_uart_error (uart_out_error),                 //                           .error
+		.from_uart_valid (uart_out_valid),                 //                           .valid
+		.to_uart_data    (uart_in_data),                   //  avalon_data_transmit_sink.data
+		.to_uart_error   (uart_in_error),                  //                           .error
+		.to_uart_valid   (uart_in_valid),                  //                           .valid
+		.to_uart_ready   (uart_in_ready),                  //                           .ready
+		.UART_RXD        (uart_RXD),                       //         external_interface.export
+		.UART_TXD        (uart_TXD)                        //                           .export
 	);
 
 	soc_system_mm_interconnect_0 mm_interconnect_0 (
@@ -281,28 +228,6 @@ module soc_system (
 		.hps_0_f2h_sdram0_data_byteenable                                   (mm_interconnect_1_hps_0_f2h_sdram0_data_byteenable),    //                                                             .byteenable
 		.hps_0_f2h_sdram0_data_readdatavalid                                (mm_interconnect_1_hps_0_f2h_sdram0_data_readdatavalid), //                                                             .readdatavalid
 		.hps_0_f2h_sdram0_data_waitrequest                                  (mm_interconnect_1_hps_0_f2h_sdram0_data_waitrequest)    //                                                             .waitrequest
-	);
-
-	soc_system_mm_interconnect_2 mm_interconnect_2 (
-		.clk_0_clk_clk                                 (clk_clk),                                   //                               clk_0_clk.clk
-		.mm_bridge_0_reset_reset_bridge_in_reset_reset (rst_controller_reset_out_reset),            // mm_bridge_0_reset_reset_bridge_in_reset.reset
-		.mm_bridge_0_m0_address                        (mm_bridge_0_m0_address),                    //                          mm_bridge_0_m0.address
-		.mm_bridge_0_m0_waitrequest                    (mm_bridge_0_m0_waitrequest),                //                                        .waitrequest
-		.mm_bridge_0_m0_burstcount                     (mm_bridge_0_m0_burstcount),                 //                                        .burstcount
-		.mm_bridge_0_m0_byteenable                     (mm_bridge_0_m0_byteenable),                 //                                        .byteenable
-		.mm_bridge_0_m0_read                           (mm_bridge_0_m0_read),                       //                                        .read
-		.mm_bridge_0_m0_readdata                       (mm_bridge_0_m0_readdata),                   //                                        .readdata
-		.mm_bridge_0_m0_readdatavalid                  (mm_bridge_0_m0_readdatavalid),              //                                        .readdatavalid
-		.mm_bridge_0_m0_write                          (mm_bridge_0_m0_write),                      //                                        .write
-		.mm_bridge_0_m0_writedata                      (mm_bridge_0_m0_writedata),                  //                                        .writedata
-		.mm_bridge_0_m0_debugaccess                    (mm_bridge_0_m0_debugaccess),                //                                        .debugaccess
-		.uart_0_s1_address                             (mm_interconnect_2_uart_0_s1_address),       //                               uart_0_s1.address
-		.uart_0_s1_write                               (mm_interconnect_2_uart_0_s1_write),         //                                        .write
-		.uart_0_s1_read                                (mm_interconnect_2_uart_0_s1_read),          //                                        .read
-		.uart_0_s1_readdata                            (mm_interconnect_2_uart_0_s1_readdata),      //                                        .readdata
-		.uart_0_s1_writedata                           (mm_interconnect_2_uart_0_s1_writedata),     //                                        .writedata
-		.uart_0_s1_begintransfer                       (mm_interconnect_2_uart_0_s1_begintransfer), //                                        .begintransfer
-		.uart_0_s1_chipselect                          (mm_interconnect_2_uart_0_s1_chipselect)     //                                        .chipselect
 	);
 
 	altera_reset_controller #(

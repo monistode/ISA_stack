@@ -46,15 +46,7 @@
          type = "int";
       }
    }
-   element mm_bridge_0
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-   }
-   element uart_0
+   element rs232_0
    {
       datum _sortIndex
       {
@@ -100,15 +92,20 @@
    type="conduit"
    dir="end" />
  <interface
-   name="uart_0_external_connection"
-   internal="uart_0.external_connection"
+   name="uart"
+   internal="rs232_0.external_interface"
    type="conduit"
    dir="end" />
  <interface
-   name="uart_bridge_s0"
-   internal="mm_bridge_0.s0"
-   type="avalon"
+   name="uart_in"
+   internal="rs232_0.avalon_data_transmit_sink"
+   type="avalon_streaming"
    dir="end" />
+ <interface
+   name="uart_out"
+   internal="rs232_0.avalon_data_receive_source"
+   type="avalon_streaming"
+   dir="start" />
  <module
    name="address_span_extender_0"
    kind="altera_address_span_extender"
@@ -671,38 +668,17 @@
   <parameter name="use_default_mpu_clk" value="true" />
  </module>
  <module
-   name="mm_bridge_0"
-   kind="altera_avalon_mm_bridge"
-   version="22.1"
+   name="rs232_0"
+   kind="altera_up_avalon_rs232"
+   version="17.1"
    enabled="1">
-  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
-  <parameter name="ADDRESS_WIDTH" value="4" />
-  <parameter name="DATA_WIDTH" value="8" />
-  <parameter name="LINEWRAPBURSTS" value="0" />
-  <parameter name="MAX_BURST_SIZE" value="1" />
-  <parameter name="MAX_PENDING_RESPONSES" value="4" />
-  <parameter name="PIPELINE_COMMAND" value="1" />
-  <parameter name="PIPELINE_RESPONSE" value="1" />
-  <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="5" />
-  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
-  <parameter name="USE_RESPONSE" value="0" />
- </module>
- <module name="uart_0" kind="altera_avalon_uart" version="22.1" enabled="1">
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="avalon_bus_type" value="Streaming" />
   <parameter name="baud" value="115200" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="dataBits" value="8" />
-  <parameter name="fixedBaud" value="true" />
-  <parameter name="parity" value="NONE" />
-  <parameter name="simCharStream" value="" />
-  <parameter name="simInteractiveInputEnable" value="false" />
-  <parameter name="simInteractiveOutputEnable" value="false" />
-  <parameter name="simTrueBaud" value="false" />
-  <parameter name="stopBits" value="1" />
-  <parameter name="syncRegDepth" value="2" />
-  <parameter name="useCtsRts" value="false" />
-  <parameter name="useEopRegister" value="false" />
-  <parameter name="useRelativePathForSimFile" value="false" />
+  <parameter name="data_bits" value="8" />
+  <parameter name="parity" value="Odd" />
+  <parameter name="stop_bits" value="2" />
  </module>
  <connection
    kind="avalon"
@@ -722,14 +698,8 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="22.1" start="mm_bridge_0.m0" end="uart_0.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection kind="clock" version="22.1" start="clk_0.clk" end="bridge_0.clk" />
- <connection kind="clock" version="22.1" start="clk_0.clk" end="uart_0.clk" />
- <connection kind="clock" version="22.1" start="clk_0.clk" end="mm_bridge_0.clk" />
+ <connection kind="clock" version="22.1" start="clk_0.clk" end="rs232_0.clk" />
  <connection
    kind="clock"
    version="22.1"
@@ -754,12 +724,7 @@
    kind="reset"
    version="22.1"
    start="clk_0.clk_reset"
-   end="uart_0.reset" />
- <connection
-   kind="reset"
-   version="22.1"
-   start="clk_0.clk_reset"
-   end="mm_bridge_0.reset" />
+   end="rs232_0.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
