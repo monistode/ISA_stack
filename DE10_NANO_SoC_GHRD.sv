@@ -49,7 +49,7 @@ logic fpga_clk_50;
 //=======================================================
 //  RAM variables
 //=======================================================
-logic [15:0] address = 16'd0;
+logic [21:0] address = 16'd0;
 logic read = 1'b0;
 logic write = 1'b0;
 logic acknowledge;
@@ -70,12 +70,10 @@ logic uart_out_ready;
 logic uart_out_error;
 logic uart_out_valid;
 logic [31:0] GPIOS;
-logic [31:0] GPIOS_READ;
 
 // connection of internal logics
 assign fpga_clk_50 = FPGA_CLK1_50;
 assign GPIO_D[34:3] = GPIOS;
-assign GPIOS_READ = GPIO_D[34:3];
 
 //=======================================================
 //  Structural coding
@@ -220,7 +218,7 @@ reg   prev_pressed = 0;
 
 parameter MEM_STACK_BASE = 16'hFE;
 parameter REG_STACK_BASE = 16'h400;
-parameter MEM_BASE = 16'h400;
+parameter MEM_BASE = 16'h4000;
 
 reg [5:0]  cur_instruction = 6'd0;
 reg [15:0] PC = 16'd0;
@@ -242,9 +240,6 @@ assign LED[7: 0] = PC[7:0];
 logic uart_write_req = 0;
 logic uart_read_req = 0;
 logic [7:0] uart_data = 0;
-
-always_ff @(posedge fpga_clk_50) begin
-end
 
 always_ff @(posedge fpga_clk_50 or negedge hps_fpga_reset_n) begin
 if (~hps_fpga_reset_n) begin
@@ -393,7 +388,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
             2'b00: begin
                 cur_instruction <= data[29:24];
                 if (data[29]) begin
-                    PC <= PC + 16'd2;
+                    PC <= PC + 16'd3;
                     address <= {IMM_ADDR[15:2] , 2'b00};
                     read_req <= '1;
                     byte_enable <= 4'b1111;
@@ -402,7 +397,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
             2'b01: begin
                 cur_instruction <= data[5:0];
                 if (data[5]) begin
-                    PC <= PC + 16'd2;
+                    PC <= PC + 16'd3;
                     address <= {IMM_ADDR[15:2] , 2'b00};
                     read_req <= '1;
                     byte_enable <= 4'b1111;
@@ -411,7 +406,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
             2'b10: begin 
                 cur_instruction <= data[13:8];
                 if (data[13]) begin
-                    PC <= PC + 16'd2;
+                    PC <= PC + 16'd3;
                     address <= {IMM_ADDR[15:2] , 2'b00};
                     read_req <= '1;
                     byte_enable <= 4'b1111;
@@ -420,7 +415,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
             2'b11: begin
                 cur_instruction <= data[21:16];
                 if (data[21]) begin
-                    PC <= PC + 16'd2;
+                    PC <= PC + 16'd3;
                     address <= {IMM_ADDR[15:2] , 2'b00};
                     read_req <= '1;
                     byte_enable <= 4'b1111;
@@ -431,11 +426,16 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         endcase
     end else if (cur_instruction[5] & cur_cpu_state == CPU_STATE_INSTR_IMM_FETCH) begin
         case (IMM_ADDR[1:0])
-            2'b00: cur_imm <= data[15:0];
-            2'b01: cur_imm <= data[23:8];
-            2'b10: cur_imm <= data[31:16];
+            2'b00: cur_imm <= {data[19:16], data[13:8], data[5:0]};
+            2'b01: cur_imm <= {data[27:24], data[21:16], data[13:8]};
+            2'b10: begin
+                cur_imm[11:0] <= {data[29:24], data[21:16]};
+                address <= {IMM_ADDR[15:2], 2'b00} + 16'd4;
+                read_req <= '1;
+                byte_enable <= 4'b1111;
+            end
             2'b11: begin
-                cur_imm[7:0] <= data[31:24];
+                cur_imm[5:0] <= data[29:24];
                 address <= {IMM_ADDR[15:2], 2'b00} + 16'd4;
                 read_req <= '1;
                 byte_enable <= 4'b1111;
@@ -445,9 +445,8 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         endcase
     end else if (cur_instruction[5] & cur_cpu_state == CPU_STATE_INSTR_IMM_FETCH_1) begin
         case (IMM_ADDR[1:0])
-            2'b11: begin
-                cur_imm[15:8] <= data[7:0];
-            end
+            2'b10: cur_imm[15:12] <= data[3:0];
+            2'b11: cur_imm[15:6] <= {data[11:8], data[5:0]};
             default: begin
             end
         endcase
@@ -1848,11 +1847,11 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                 end
 
                 CPU_STATE_INSTR_OPERAND_FETCH_1: begin
-                    tmp_word <= uart_data;
+                    tmp_word <= {8'b0, uart_data};
                 end
 
                 CPU_STATE_INSTR_EXEC: begin
-                    write_data <= {2{8'b0, tmp_word}};
+                    write_data <= {2{tmp_word}};
                     if (SP[1]) byte_enable <= 4'b1100;
                     else byte_enable <= 4'b0011;
                     write_req <= 1;
@@ -1883,13 +1882,6 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                     if (cur_imm == 0) begin
                         uart_write_req <= 1;
                         uart_wdata <= tmp_word[7:0];
-                    end else GPIOS[cur_imm[5:0]] <= tmp_word[0];
-                end
-
-                CPU_STATE_INSTR_EXEC_1: begin
-                    if (cur_imm == 0) begin
-                        uart_write_req <= 1;
-                        uart_wdata <= tmp_word[15:8];
                     end else GPIOS[cur_imm[5:0]] <= tmp_word[0];
                 end
 

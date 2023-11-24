@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 22.1 922 (Future versions may contain additional information.) -->
- <!-- 2023.11.20.16:25:22 -->
+ <!-- 2023.11.24.16:59:38 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1700490313</value>
+  <value>1700837969</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -136,7 +136,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SLAVE_ADDRESS_WIDTH</name>
-   <value>14</value>
+   <value>20</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SUB_WINDOW_COUNT</name>
@@ -184,7 +184,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_WIDTH">
    <type>int</type>
-   <value>14</value>
+   <value>20</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -192,7 +192,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_SPAN">
    <type>java.lang.String</type>
-   <value>64 kilobytes</value>
+   <value>4 megabytes</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -264,7 +264,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SUB_WINDOW_SPAN">
    <type>java.lang.String</type>
-   <value>64 kilobytes</value>
+   <value>4 megabytes</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -422,7 +422,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>65536</value>
+    <value>4194304</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -721,7 +721,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_address</name>
     <direction>Input</direction>
-    <width>14</width>
+    <width>20</width>
     <role>address</role>
    </port>
    <port>
@@ -1108,7 +1108,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="addr_size">
    <type>int</type>
-   <value>64</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1116,7 +1116,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="addr_size_multiplier">
    <type>java.lang.String</type>
-   <value>Kbytes</value>
+   <value>Mbytes</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1573,7 +1573,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_address</name>
     <direction>Output</direction>
-    <width>16</width>
+    <width>22</width>
     <role>address</role>
    </port>
    <memoryBlock>
@@ -1582,7 +1582,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>windowed_slave</slaveName>
     <name>address_span_extender_0.windowed_slave</name>
     <baseAddress>0</baseAddress>
-    <span>65536</span>
+    <span>4194304</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -1590,7 +1590,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>f2h_sdram0_data</slaveName>
     <name>hps_0_bridges.f2h_sdram0_data</name>
     <baseAddress>0</baseAddress>
-    <span>65536</span>
+    <span>4194304</span>
    </memoryBlock>
   </interface>
   <interface name="external_interface" kind="conduit_end" version="22.1">
@@ -1634,7 +1634,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>22</width>
     <role>export</role>
    </port>
    <port>

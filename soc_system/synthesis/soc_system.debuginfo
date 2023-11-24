@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="system" version="22.1" fabric="QSYS">
  <!-- Format version 22.1 922 (Future versions may contain additional information.) -->
- <!-- 2023.11.20.16:25:47 -->
+ <!-- 2023.11.24.17:00:00 -->
  <!-- A collection of modules and connections -->
  <parameter name="clockCrossingAdapter">
   <type>com.altera.sopcmodel.ensemble.EClockAdapter</type>
@@ -53,7 +53,7 @@
  </parameter>
  <parameter name="generationId">
   <type>int</type>
-  <value>1700490313</value>
+  <value>1700837969</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>true</visible>
@@ -188,7 +188,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SLAVE_ADDRESS_WIDTH</name>
-   <value>14</value>
+   <value>20</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SUB_WINDOW_COUNT</name>
@@ -236,7 +236,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_WIDTH">
    <type>int</type>
-   <value>14</value>
+   <value>20</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -244,7 +244,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SLAVE_ADDRESS_SPAN">
    <type>java.lang.String</type>
-   <value>64 kilobytes</value>
+   <value>4 megabytes</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -316,7 +316,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="SUB_WINDOW_SPAN">
    <type>java.lang.String</type>
-   <value>64 kilobytes</value>
+   <value>4 megabytes</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -474,7 +474,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>65536</value>
+    <value>4194304</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -773,7 +773,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avs_s0_address</name>
     <direction>Input</direction>
-    <width>14</width>
+    <width>20</width>
     <role>address</role>
    </port>
    <port>
@@ -1160,7 +1160,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="addr_size">
    <type>int</type>
-   <value>64</value>
+   <value>4</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1168,7 +1168,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="addr_size_multiplier">
    <type>java.lang.String</type>
-   <value>Kbytes</value>
+   <value>Mbytes</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -1625,7 +1625,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>avalon_address</name>
     <direction>Output</direction>
-    <width>16</width>
+    <width>22</width>
     <role>address</role>
    </port>
    <memoryBlock>
@@ -1634,7 +1634,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>bridge_0_avalon_master</slaveName>
     <name>mm_interconnect_0.bridge_0_avalon_master</name>
     <baseAddress>0</baseAddress>
-    <span>65536</span>
+    <span>4194304</span>
    </memoryBlock>
   </interface>
   <interface name="external_interface" kind="conduit_end" version="22.1">
@@ -1678,7 +1678,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>22</width>
     <role>export</role>
    </port>
    <port>
@@ -41967,7 +41967,7 @@ the requested settings for a module instance. -->
   </assignment>
   <parameter name="COMPOSE_CONTENTS">
    <type>java.lang.String</type>
-   <value>add_instance {bridge_0_avalon_master_translator} {altera_merlin_master_translator};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESS_W} {16};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_DATA_W} {32};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTCOUNT_W} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BYTEENABLE_W} {4};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_ADDRESS_W} {16};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_BURSTCOUNT_W} {3};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_READLATENCY} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_WRITE_WAIT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_READ_WAIT} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_DATA_HOLD} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_SETUP_WAIT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READDATA} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITEDATA} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READ} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITE} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BEGINBURSTTRANSFER} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BEGINTRANSFER} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BYTEENABLE} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_CHIPSELECT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_ADDRESS} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BURSTCOUNT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_DEBUGACCESS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_CLKEN} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READDATAVALID} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WAITREQUEST} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_LOCK} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READRESPONSE} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITERESPONSE} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_SYMBOLS_PER_WORD} {4};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESS_SYMBOLS} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTCOUNT_SYMBOLS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_LINEWRAPBURSTS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_MAX_PENDING_READ_TRANSACTIONS} {64};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTBOUNDARIES} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_INTERLEAVEBURSTS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BITS_PER_SYMBOL} {8};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ISBIGENDIAN} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESSGROUP} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_ADDRESSGROUP} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_REGISTEROUTGOINGSIGNALS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_REGISTERINCOMINGSIGNALS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ALWAYSBURSTMAXBURST} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {SYNC_RESET} {0};add_instance {address_span_extender_0_windowed_slave_translator} {altera_merlin_slave_translator};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESS_W} {14};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_DATA_W} {32};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_DATA_W} {32};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTCOUNT_W} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BYTEENABLE_W} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_BYTEENABLE_W} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_ADDRESS_W} {16};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_BURSTCOUNT_W} {3};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_READLATENCY} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_SETUP_WAIT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_WRITE_WAIT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_READ_WAIT} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_DATA_HOLD} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_TIMING_UNITS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READDATA} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITEDATA} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READ} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITE} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BEGINBURSTTRANSFER} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BEGINTRANSFER} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BYTEENABLE} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_CHIPSELECT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_ADDRESS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BURSTCOUNT} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READDATAVALID} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WAITREQUEST} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITEBYTEENABLE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_LOCK} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_AV_CLKEN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_UAV_CLKEN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_OUTPUTENABLE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_DEBUGACCESS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READRESPONSE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITERESPONSE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_SYMBOLS_PER_WORD} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESS_SYMBOLS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTCOUNT_SYMBOLS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REQUIRE_UNALIGNED_ADDRESSES} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_LINEWRAPBURSTS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_MAX_PENDING_READ_TRANSACTIONS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_MAX_PENDING_WRITE_TRANSACTIONS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTBOUNDARIES} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_INTERLEAVEBURSTS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BITS_PER_SYMBOL} {8};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ISBIGENDIAN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESSGROUP} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_ADDRESSGROUP} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REGISTEROUTGOINGSIGNALS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REGISTERINCOMINGSIGNALS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ALWAYSBURSTMAXBURST} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {CHIPSELECT_THROUGH_READLATENCY} {0};add_instance {bridge_0_reset_reset_bridge} {altera_reset_bridge};set_instance_parameter_value {bridge_0_reset_reset_bridge} {ACTIVE_LOW_RESET} {0};set_instance_parameter_value {bridge_0_reset_reset_bridge} {SYNCHRONOUS_EDGES} {deassert};set_instance_parameter_value {bridge_0_reset_reset_bridge} {NUM_RESET_OUTPUTS} {1};set_instance_parameter_value {bridge_0_reset_reset_bridge} {USE_RESET_REQUEST} {0};add_instance {clk_0_clk_clock_bridge} {altera_clock_bridge};set_instance_parameter_value {clk_0_clk_clock_bridge} {EXPLICIT_CLOCK_RATE} {50000000};set_instance_parameter_value {clk_0_clk_clock_bridge} {NUM_CLOCK_OUTPUTS} {1};add_connection {bridge_0_avalon_master_translator.avalon_universal_master_0} {address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {avalon};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {arbitrationPriority} {1};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {baseAddress} {0x0000};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {defaultConnection} {false};add_connection {bridge_0_reset_reset_bridge.out_reset} {bridge_0_avalon_master_translator.reset} {reset};add_connection {bridge_0_reset_reset_bridge.out_reset} {address_span_extender_0_windowed_slave_translator.reset} {reset};add_connection {clk_0_clk_clock_bridge.out_clk} {bridge_0_avalon_master_translator.clk} {clock};add_connection {clk_0_clk_clock_bridge.out_clk} {address_span_extender_0_windowed_slave_translator.clk} {clock};add_connection {clk_0_clk_clock_bridge.out_clk} {bridge_0_reset_reset_bridge.clk} {clock};add_interface {clk_0_clk} {clock} {slave};set_interface_property {clk_0_clk} {EXPORT_OF} {clk_0_clk_clock_bridge.in_clk};add_interface {bridge_0_reset_reset_bridge_in_reset} {reset} {slave};set_interface_property {bridge_0_reset_reset_bridge_in_reset} {EXPORT_OF} {bridge_0_reset_reset_bridge.in_reset};add_interface {bridge_0_avalon_master} {avalon} {slave};set_interface_property {bridge_0_avalon_master} {EXPORT_OF} {bridge_0_avalon_master_translator.avalon_anti_master_0};add_interface {address_span_extender_0_windowed_slave} {avalon} {master};set_interface_property {address_span_extender_0_windowed_slave} {EXPORT_OF} {address_span_extender_0_windowed_slave_translator.avalon_anti_slave_0};set_module_assignment {interconnect_id.address_span_extender_0.windowed_slave} {0};set_module_assignment {interconnect_id.bridge_0.avalon_master} {0};</value>
+   <value>add_instance {bridge_0_avalon_master_translator} {altera_merlin_master_translator};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESS_W} {22};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_DATA_W} {32};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTCOUNT_W} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BYTEENABLE_W} {4};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_ADDRESS_W} {22};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_BURSTCOUNT_W} {3};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_READLATENCY} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_WRITE_WAIT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_READ_WAIT} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_DATA_HOLD} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_SETUP_WAIT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READDATA} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITEDATA} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READ} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITE} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BEGINBURSTTRANSFER} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BEGINTRANSFER} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BYTEENABLE} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_CHIPSELECT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_ADDRESS} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_BURSTCOUNT} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_DEBUGACCESS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_CLKEN} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READDATAVALID} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WAITREQUEST} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_LOCK} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_READRESPONSE} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {USE_WRITERESPONSE} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_SYMBOLS_PER_WORD} {4};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESS_SYMBOLS} {1};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTCOUNT_SYMBOLS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_LINEWRAPBURSTS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_MAX_PENDING_READ_TRANSACTIONS} {64};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BURSTBOUNDARIES} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_INTERLEAVEBURSTS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_BITS_PER_SYMBOL} {8};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ISBIGENDIAN} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ADDRESSGROUP} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {UAV_ADDRESSGROUP} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_REGISTEROUTGOINGSIGNALS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_REGISTERINCOMINGSIGNALS} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {AV_ALWAYSBURSTMAXBURST} {0};set_instance_parameter_value {bridge_0_avalon_master_translator} {SYNC_RESET} {0};add_instance {address_span_extender_0_windowed_slave_translator} {altera_merlin_slave_translator};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESS_W} {20};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_DATA_W} {32};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_DATA_W} {32};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTCOUNT_W} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BYTEENABLE_W} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_BYTEENABLE_W} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_ADDRESS_W} {22};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_BURSTCOUNT_W} {3};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_READLATENCY} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_SETUP_WAIT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_WRITE_WAIT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_READ_WAIT} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_DATA_HOLD} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_TIMING_UNITS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READDATA} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITEDATA} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READ} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITE} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BEGINBURSTTRANSFER} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BEGINTRANSFER} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BYTEENABLE} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_CHIPSELECT} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_ADDRESS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_BURSTCOUNT} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READDATAVALID} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WAITREQUEST} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITEBYTEENABLE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_LOCK} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_AV_CLKEN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_UAV_CLKEN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_OUTPUTENABLE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_DEBUGACCESS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_READRESPONSE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {USE_WRITERESPONSE} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_SYMBOLS_PER_WORD} {4};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESS_SYMBOLS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTCOUNT_SYMBOLS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_CONSTANT_BURST_BEHAVIOR} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REQUIRE_UNALIGNED_ADDRESSES} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_LINEWRAPBURSTS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_MAX_PENDING_READ_TRANSACTIONS} {1};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_MAX_PENDING_WRITE_TRANSACTIONS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BURSTBOUNDARIES} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_INTERLEAVEBURSTS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_BITS_PER_SYMBOL} {8};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ISBIGENDIAN} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ADDRESSGROUP} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {UAV_ADDRESSGROUP} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REGISTEROUTGOINGSIGNALS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_REGISTERINCOMINGSIGNALS} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {AV_ALWAYSBURSTMAXBURST} {0};set_instance_parameter_value {address_span_extender_0_windowed_slave_translator} {CHIPSELECT_THROUGH_READLATENCY} {0};add_instance {bridge_0_reset_reset_bridge} {altera_reset_bridge};set_instance_parameter_value {bridge_0_reset_reset_bridge} {ACTIVE_LOW_RESET} {0};set_instance_parameter_value {bridge_0_reset_reset_bridge} {SYNCHRONOUS_EDGES} {deassert};set_instance_parameter_value {bridge_0_reset_reset_bridge} {NUM_RESET_OUTPUTS} {1};set_instance_parameter_value {bridge_0_reset_reset_bridge} {USE_RESET_REQUEST} {0};add_instance {clk_0_clk_clock_bridge} {altera_clock_bridge};set_instance_parameter_value {clk_0_clk_clock_bridge} {EXPLICIT_CLOCK_RATE} {50000000};set_instance_parameter_value {clk_0_clk_clock_bridge} {NUM_CLOCK_OUTPUTS} {1};add_connection {bridge_0_avalon_master_translator.avalon_universal_master_0} {address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {avalon};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {arbitrationPriority} {1};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {baseAddress} {0x0000};set_connection_parameter_value {bridge_0_avalon_master_translator.avalon_universal_master_0/address_span_extender_0_windowed_slave_translator.avalon_universal_slave_0} {defaultConnection} {false};add_connection {bridge_0_reset_reset_bridge.out_reset} {bridge_0_avalon_master_translator.reset} {reset};add_connection {bridge_0_reset_reset_bridge.out_reset} {address_span_extender_0_windowed_slave_translator.reset} {reset};add_connection {clk_0_clk_clock_bridge.out_clk} {bridge_0_avalon_master_translator.clk} {clock};add_connection {clk_0_clk_clock_bridge.out_clk} {address_span_extender_0_windowed_slave_translator.clk} {clock};add_connection {clk_0_clk_clock_bridge.out_clk} {bridge_0_reset_reset_bridge.clk} {clock};add_interface {clk_0_clk} {clock} {slave};set_interface_property {clk_0_clk} {EXPORT_OF} {clk_0_clk_clock_bridge.in_clk};add_interface {bridge_0_reset_reset_bridge_in_reset} {reset} {slave};set_interface_property {bridge_0_reset_reset_bridge_in_reset} {EXPORT_OF} {bridge_0_reset_reset_bridge.in_reset};add_interface {bridge_0_avalon_master} {avalon} {slave};set_interface_property {bridge_0_avalon_master} {EXPORT_OF} {bridge_0_avalon_master_translator.avalon_anti_master_0};add_interface {address_span_extender_0_windowed_slave} {avalon} {master};set_interface_property {address_span_extender_0_windowed_slave} {EXPORT_OF} {address_span_extender_0_windowed_slave_translator.avalon_anti_slave_0};set_module_assignment {interconnect_id.address_span_extender_0.windowed_slave} {0};set_module_assignment {interconnect_id.bridge_0.avalon_master} {0};</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -42152,7 +42152,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>65536</value>
+    <value>4194304</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -42451,7 +42451,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>bridge_0_avalon_master_address</name>
     <direction>Input</direction>
-    <width>16</width>
+    <width>22</width>
     <role>address</role>
    </port>
    <port>
@@ -42759,7 +42759,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address_span_extender_0_windowed_slave_address</name>
     <direction>Output</direction>
-    <width>14</width>
+    <width>20</width>
     <role>address</role>
    </port>
    <port>
@@ -42816,7 +42816,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>windowed_slave</slaveName>
     <name>address_span_extender_0.windowed_slave</name>
     <baseAddress>0</baseAddress>
-    <span>65536</span>
+    <span>4194304</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -42824,7 +42824,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>address_span_extender_0_expanded_master</slaveName>
     <name>mm_interconnect_1.address_span_extender_0_expanded_master</name>
     <baseAddress>0</baseAddress>
-    <span>65536</span>
+    <span>4194304</span>
    </memoryBlock>
   </interface>
  </module>
@@ -45355,5 +45355,5 @@ parameters are a RESULT of the module parameters. -->
   <version>22.1</version>
  </plugin>
  <reportVersion>22.1 922</reportVersion>
- <uniqueIdentifier>0242D85AE7AC0000018BED1F325D</uniqueIdentifier>
+ <uniqueIdentifier>024284949ADA0000018C01D7FF0F</uniqueIdentifier>
 </EnsembleReport>

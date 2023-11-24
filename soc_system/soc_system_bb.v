@@ -26,16 +26,16 @@ module soc_system (
 	sdram_write_data,
 	sdram_acknowledge,
 	sdram_read_data,
-	uart_out_ready,
-	uart_out_data,
-	uart_out_error,
-	uart_out_valid,
+	uart_RXD,
+	uart_TXD,
 	uart_in_data,
 	uart_in_error,
 	uart_in_valid,
 	uart_in_ready,
-	uart_RXD,
-	uart_TXD);	
+	uart_out_ready,
+	uart_out_data,
+	uart_out_error,
+	uart_out_valid);	
 
 	input		clk_clk;
 	output		hps_0_h2f_reset_reset_n;
@@ -56,21 +56,21 @@ module soc_system (
 	output	[3:0]	memory_mem_dm;
 	input		memory_oct_rzqin;
 	input		reset_reset_n;
-	input	[15:0]	sdram_address;
+	input	[21:0]	sdram_address;
 	input	[3:0]	sdram_byte_enable;
 	input		sdram_read;
 	input		sdram_write;
 	input	[31:0]	sdram_write_data;
 	output		sdram_acknowledge;
 	output	[31:0]	sdram_read_data;
-	input		uart_out_ready;
-	output	[7:0]	uart_out_data;
-	output		uart_out_error;
-	output		uart_out_valid;
+	input		uart_RXD;
+	output		uart_TXD;
 	input	[7:0]	uart_in_data;
 	input		uart_in_error;
 	input		uart_in_valid;
 	output		uart_in_ready;
-	input		uart_RXD;
-	output		uart_TXD;
+	input		uart_out_ready;
+	output	[7:0]	uart_out_data;
+	output		uart_out_error;
+	output		uart_out_valid;
 endmodule

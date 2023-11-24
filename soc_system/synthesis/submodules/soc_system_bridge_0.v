@@ -63,7 +63,7 @@ module soc_system_bridge_0 (
  *                           Parameter Declarations                          *
  *****************************************************************************/
 
-parameter	AW	= 15;	// Address width
+parameter	AW	= 21;	// Address width
 parameter	DW	= 31;	// Data width
 
 parameter	BW	= 3;	// Byte enable width

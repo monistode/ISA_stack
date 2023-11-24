@@ -117,7 +117,7 @@
   <parameter name="MASTER_ADDRESS_DEF" value="536870912" />
   <parameter name="MASTER_ADDRESS_WIDTH" value="32" />
   <parameter name="MAX_PENDING_READS" value="1" />
-  <parameter name="SLAVE_ADDRESS_WIDTH" value="14" />
+  <parameter name="SLAVE_ADDRESS_WIDTH" value="20" />
   <parameter name="SUB_WINDOW_COUNT" value="1" />
  </module>
  <module
@@ -127,8 +127,8 @@
    enabled="1">
   <parameter name="AUTO_CLK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone V" />
-  <parameter name="addr_size" value="64" />
-  <parameter name="addr_size_multiplier" value="Kbytes" />
+  <parameter name="addr_size" value="4" />
+  <parameter name="addr_size_multiplier" value="Mbytes" />
   <parameter name="data_size" value="32" />
  </module>
  <module name="clk_0" kind="clock_source" version="22.1" enabled="1">

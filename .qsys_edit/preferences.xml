@@ -11,7 +11,6 @@
    <export preferredWidth="231" />
   </columns>
  </systemtable>
- <library
-   expandedCategories="Library/Interface Protocols,Library,Library/Interface Protocols/Serial,Library/University Program/Communications,Library/University Program,Project" />
- <window width="1904" height="1032" x="708" y="40" />
+ <library expandedCategories="Library,Project" />
+ <window width="1904" height="1032" x="8" y="40" />
 </preferences>

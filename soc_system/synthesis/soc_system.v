@@ -23,7 +23,7 @@ module soc_system (
 		output wire [3:0]  memory_mem_dm,           //                .mem_dm
 		input  wire        memory_oct_rzqin,        //                .oct_rzqin
 		input  wire        reset_reset_n,           //           reset.reset_n
-		input  wire [15:0] sdram_address,           //           sdram.address
+		input  wire [21:0] sdram_address,           //           sdram.address
 		input  wire [3:0]  sdram_byte_enable,       //                .byte_enable
 		input  wire        sdram_read,              //                .read
 		input  wire        sdram_write,             //                .write
@@ -46,12 +46,12 @@ module soc_system (
 	wire         bridge_0_avalon_master_waitrequest;                                     // mm_interconnect_0:bridge_0_avalon_master_waitrequest -> bridge_0:avalon_waitrequest
 	wire   [3:0] bridge_0_avalon_master_byteenable;                                      // bridge_0:avalon_byteenable -> mm_interconnect_0:bridge_0_avalon_master_byteenable
 	wire         bridge_0_avalon_master_read;                                            // bridge_0:avalon_read -> mm_interconnect_0:bridge_0_avalon_master_read
-	wire  [15:0] bridge_0_avalon_master_address;                                         // bridge_0:avalon_address -> mm_interconnect_0:bridge_0_avalon_master_address
+	wire  [21:0] bridge_0_avalon_master_address;                                         // bridge_0:avalon_address -> mm_interconnect_0:bridge_0_avalon_master_address
 	wire         bridge_0_avalon_master_write;                                           // bridge_0:avalon_write -> mm_interconnect_0:bridge_0_avalon_master_write
 	wire  [31:0] bridge_0_avalon_master_writedata;                                       // bridge_0:avalon_writedata -> mm_interconnect_0:bridge_0_avalon_master_writedata
 	wire  [31:0] mm_interconnect_0_address_span_extender_0_windowed_slave_readdata;      // address_span_extender_0:avs_s0_readdata -> mm_interconnect_0:address_span_extender_0_windowed_slave_readdata
 	wire         mm_interconnect_0_address_span_extender_0_windowed_slave_waitrequest;   // address_span_extender_0:avs_s0_waitrequest -> mm_interconnect_0:address_span_extender_0_windowed_slave_waitrequest
-	wire  [13:0] mm_interconnect_0_address_span_extender_0_windowed_slave_address;       // mm_interconnect_0:address_span_extender_0_windowed_slave_address -> address_span_extender_0:avs_s0_address
+	wire  [19:0] mm_interconnect_0_address_span_extender_0_windowed_slave_address;       // mm_interconnect_0:address_span_extender_0_windowed_slave_address -> address_span_extender_0:avs_s0_address
 	wire         mm_interconnect_0_address_span_extender_0_windowed_slave_read;          // mm_interconnect_0:address_span_extender_0_windowed_slave_read -> address_span_extender_0:avs_s0_read
 	wire   [3:0] mm_interconnect_0_address_span_extender_0_windowed_slave_byteenable;    // mm_interconnect_0:address_span_extender_0_windowed_slave_byteenable -> address_span_extender_0:avs_s0_byteenable
 	wire         mm_interconnect_0_address_span_extender_0_windowed_slave_readdatavalid; // address_span_extender_0:avs_s0_readdatavalid -> mm_interconnect_0:address_span_extender_0_windowed_slave_readdatavalid
@@ -83,7 +83,7 @@ module soc_system (
 		.DATA_WIDTH           (32),
 		.BYTEENABLE_WIDTH     (4),
 		.MASTER_ADDRESS_WIDTH (32),
-		.SLAVE_ADDRESS_WIDTH  (14),
+		.SLAVE_ADDRESS_WIDTH  (20),
 		.SLAVE_ADDRESS_SHIFT  (2),
 		.BURSTCOUNT_WIDTH     (1),
 		.CNTL_ADDRESS_WIDTH   (1),

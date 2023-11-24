@@ -9,14 +9,14 @@
 module soc_system_mm_interconnect_0 (
 		input  wire        clk_0_clk_clk,                                        //                              clk_0_clk.clk
 		input  wire        bridge_0_reset_reset_bridge_in_reset_reset,           //   bridge_0_reset_reset_bridge_in_reset.reset
-		input  wire [15:0] bridge_0_avalon_master_address,                       //                 bridge_0_avalon_master.address
+		input  wire [21:0] bridge_0_avalon_master_address,                       //                 bridge_0_avalon_master.address
 		output wire        bridge_0_avalon_master_waitrequest,                   //                                       .waitrequest
 		input  wire [3:0]  bridge_0_avalon_master_byteenable,                    //                                       .byteenable
 		input  wire        bridge_0_avalon_master_read,                          //                                       .read
 		output wire [31:0] bridge_0_avalon_master_readdata,                      //                                       .readdata
 		input  wire        bridge_0_avalon_master_write,                         //                                       .write
 		input  wire [31:0] bridge_0_avalon_master_writedata,                     //                                       .writedata
-		output wire [13:0] address_span_extender_0_windowed_slave_address,       // address_span_extender_0_windowed_slave.address
+		output wire [19:0] address_span_extender_0_windowed_slave_address,       // address_span_extender_0_windowed_slave.address
 		output wire        address_span_extender_0_windowed_slave_write,         //                                       .write
 		output wire        address_span_extender_0_windowed_slave_read,          //                                       .read
 		input  wire [31:0] address_span_extender_0_windowed_slave_readdata,      //                                       .readdata
@@ -30,7 +30,7 @@ module soc_system_mm_interconnect_0 (
 	wire         bridge_0_avalon_master_translator_avalon_universal_master_0_waitrequest;   // address_span_extender_0_windowed_slave_translator:uav_waitrequest -> bridge_0_avalon_master_translator:uav_waitrequest
 	wire  [31:0] bridge_0_avalon_master_translator_avalon_universal_master_0_readdata;      // address_span_extender_0_windowed_slave_translator:uav_readdata -> bridge_0_avalon_master_translator:uav_readdata
 	wire         bridge_0_avalon_master_translator_avalon_universal_master_0_debugaccess;   // bridge_0_avalon_master_translator:uav_debugaccess -> address_span_extender_0_windowed_slave_translator:uav_debugaccess
-	wire  [15:0] bridge_0_avalon_master_translator_avalon_universal_master_0_address;       // bridge_0_avalon_master_translator:uav_address -> address_span_extender_0_windowed_slave_translator:uav_address
+	wire  [21:0] bridge_0_avalon_master_translator_avalon_universal_master_0_address;       // bridge_0_avalon_master_translator:uav_address -> address_span_extender_0_windowed_slave_translator:uav_address
 	wire         bridge_0_avalon_master_translator_avalon_universal_master_0_read;          // bridge_0_avalon_master_translator:uav_read -> address_span_extender_0_windowed_slave_translator:uav_read
 	wire   [3:0] bridge_0_avalon_master_translator_avalon_universal_master_0_byteenable;    // bridge_0_avalon_master_translator:uav_byteenable -> address_span_extender_0_windowed_slave_translator:uav_byteenable
 	wire         bridge_0_avalon_master_translator_avalon_universal_master_0_readdatavalid; // address_span_extender_0_windowed_slave_translator:uav_readdatavalid -> bridge_0_avalon_master_translator:uav_readdatavalid
@@ -40,11 +40,11 @@ module soc_system_mm_interconnect_0 (
 	wire   [2:0] bridge_0_avalon_master_translator_avalon_universal_master_0_burstcount;    // bridge_0_avalon_master_translator:uav_burstcount -> address_span_extender_0_windowed_slave_translator:uav_burstcount
 
 	altera_merlin_master_translator #(
-		.AV_ADDRESS_W                (16),
+		.AV_ADDRESS_W                (22),
 		.AV_DATA_W                   (32),
 		.AV_BURSTCOUNT_W             (1),
 		.AV_BYTEENABLE_W             (4),
-		.UAV_ADDRESS_W               (16),
+		.UAV_ADDRESS_W               (22),
 		.UAV_BURSTCOUNT_W            (3),
 		.USE_READ                    (1),
 		.USE_WRITE                   (1),
@@ -100,13 +100,13 @@ module soc_system_mm_interconnect_0 (
 	);
 
 	altera_merlin_slave_translator #(
-		.AV_ADDRESS_W                   (14),
+		.AV_ADDRESS_W                   (20),
 		.AV_DATA_W                      (32),
 		.UAV_DATA_W                     (32),
 		.AV_BURSTCOUNT_W                (1),
 		.AV_BYTEENABLE_W                (4),
 		.UAV_BYTEENABLE_W               (4),
-		.UAV_ADDRESS_W                  (16),
+		.UAV_ADDRESS_W                  (22),
 		.UAV_BURSTCOUNT_W               (3),
 		.AV_READLATENCY                 (0),
 		.USE_READDATAVALID              (1),

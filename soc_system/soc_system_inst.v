@@ -25,15 +25,15 @@
 		.sdram_write_data        (<connected-to-sdram_write_data>),        //                .write_data
 		.sdram_acknowledge       (<connected-to-sdram_acknowledge>),       //                .acknowledge
 		.sdram_read_data         (<connected-to-sdram_read_data>),         //                .read_data
-		.uart_out_ready          (<connected-to-uart_out_ready>),          //        uart_out.ready
-		.uart_out_data           (<connected-to-uart_out_data>),           //                .data
-		.uart_out_error          (<connected-to-uart_out_error>),          //                .error
-		.uart_out_valid          (<connected-to-uart_out_valid>),          //                .valid
+		.uart_RXD                (<connected-to-uart_RXD>),                //            uart.RXD
+		.uart_TXD                (<connected-to-uart_TXD>),                //                .TXD
 		.uart_in_data            (<connected-to-uart_in_data>),            //         uart_in.data
 		.uart_in_error           (<connected-to-uart_in_error>),           //                .error
 		.uart_in_valid           (<connected-to-uart_in_valid>),           //                .valid
 		.uart_in_ready           (<connected-to-uart_in_ready>),           //                .ready
-		.uart_RXD                (<connected-to-uart_RXD>),                //            uart.RXD
-		.uart_TXD                (<connected-to-uart_TXD>)                 //                .TXD
+		.uart_out_ready          (<connected-to-uart_out_ready>),          //        uart_out.ready
+		.uart_out_data           (<connected-to-uart_out_data>),           //                .data
+		.uart_out_error          (<connected-to-uart_out_error>),          //                .error
+		.uart_out_valid          (<connected-to-uart_out_valid>)           //                .valid
 	);
 
