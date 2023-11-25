@@ -426,16 +426,16 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         endcase
     end else if (cur_instruction[5] & cur_cpu_state == CPU_STATE_INSTR_IMM_FETCH) begin
         case (IMM_ADDR[1:0])
-            2'b00: cur_imm <= {data[19:16], data[13:8], data[5:0]};
-            2'b01: cur_imm <= {data[27:24], data[21:16], data[13:8]};
+            2'b00: cur_imm <= {data[3:0], data[13:8], data[21:16]};
+            2'b01: cur_imm <= {data[11:8], data[21:16], data[29:24]};
             2'b10: begin
-                cur_imm[11:0] <= {data[29:24], data[21:16]};
+                cur_imm[15:6] <= {data[19:16], data[29:24]};
                 address <= {IMM_ADDR[15:2], 2'b00} + 16'd4;
                 read_req <= '1;
                 byte_enable <= 4'b1111;
             end
             2'b11: begin
-                cur_imm[5:0] <= data[29:24];
+                cur_imm[15:12] <= data[26:24];
                 address <= {IMM_ADDR[15:2], 2'b00} + 16'd4;
                 read_req <= '1;
                 byte_enable <= 4'b1111;
@@ -445,8 +445,8 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         endcase
     end else if (cur_instruction[5] & cur_cpu_state == CPU_STATE_INSTR_IMM_FETCH_1) begin
         case (IMM_ADDR[1:0])
-            2'b10: cur_imm[15:12] <= data[3:0];
-            2'b11: cur_imm[15:6] <= {data[11:8], data[5:0]};
+            2'b10: cur_imm[5:0] <= data[5:0];
+            2'b11: cur_imm[11:0] <= {data[5:0], data[13:8]};
             default: begin
             end
         endcase
