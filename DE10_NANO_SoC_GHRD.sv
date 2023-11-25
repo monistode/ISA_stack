@@ -218,7 +218,7 @@ reg   prev_pressed = 0;
 
 parameter MEM_STACK_BASE = 16'hFE;
 parameter REG_STACK_BASE = 16'h400;
-parameter MEM_BASE = 16'h10000;
+parameter MEM_BASE = 21'h10000;
 
 reg [5:0]  cur_instruction = 6'd0;
 reg [15:0] PC = 16'd0;
@@ -912,27 +912,22 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         6'b001000: begin
             case (cur_cpu_state)
                 CPU_STATE_INSTR_OPERAND_FETCH: begin
-                    read_req <= 1;
-                    byte_enable <= 4'b1111;
-                    address <= MEM_BASE + {SP[15:2], 2'b00};
-                    SP <= SP - 16'd2;
+                    SP <= SP + 16'd2;
                 end
 
                 CPU_STATE_INSTR_OPERAND_FETCH_1: begin
-                    if (SP[1]) tmp_word <= data[15:0];
-                    else tmp_word <= data[31:16];
+                    read_req <= 1;
+                    byte_enable <= 4'b1111;
+                    address <= MEM_BASE + {SP[15:2], 2'b00};
                 end
 
                 CPU_STATE_INSTR_EXEC: begin
-                    if (SP[1]) byte_enable <= 4'b1100;
-                    else byte_enable <= 4'b0011;
-                    write_data <= {2{tmp_word}};
-                    address <= MEM_BASE + {SP[15:2], 2'b00};
-                    write_req <= 1;
-                    SP <= SP - 16'd2;
+                    if (SP[1]) tmp_word <= data[31:16];
+                    else tmp_word <= data[15:0];
+                    SP <= SP - 16'd4;
                 end
 
-                CPU_STATE_INSTR_EXEC_1: begin
+                CPU_STATE_INSTR_WRITEBACK: begin
                     if (SP[1]) byte_enable <= 4'b1100;
                     else byte_enable <= 4'b0011;
                     write_data <= {2{tmp_word}};
@@ -1653,7 +1648,6 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
             endcase
         end
 
-        // TODO: Fix this. Why does it not work anyways?
         // CMPE $IMM
         6'b100110: begin
             case (cur_cpu_state)
@@ -1670,8 +1664,8 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                 end
 
                 CPU_STATE_INSTR_EXEC_1: begin
-                    if (cur_imm == tmp_word) cur_imm <= 16'hFFFF;
-                    else cur_imm <= 16'h0;
+                    if (cur_imm == tmp_word) tmp_address <= 16'hFFFF;
+                    else tmp_address <= 16'h0;
                 end
 
                 CPU_STATE_INSTR_WRITEBACK: begin
@@ -1747,8 +1741,8 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                 end
 
                 CPU_STATE_INSTR_EXEC_1: begin
-                    if (cur_imm > tmp_word) cur_imm <= 16'hFFFF;
-                    else cur_imm <= 16'h0;
+                    if (cur_imm > tmp_word) tmp_address <= 16'hFFFF;
+                    else tmp_address <= 16'h0;
                 end
 
                 CPU_STATE_INSTR_WRITEBACK: begin
@@ -1827,7 +1821,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                     end
                 end
 
-                CPU_STATE_INSTR_OPERAND_EXEC_1: begin
+                CPU_STATE_INSTR_EXEC_1: begin
                     if (SP[1]) tmp_address <= data[15:0];
                     else tmp_address <= data[31:16];
                 end
