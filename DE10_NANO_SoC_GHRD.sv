@@ -218,7 +218,7 @@ reg   prev_pressed = 0;
 
 parameter MEM_STACK_BASE = 16'hFE;
 parameter REG_STACK_BASE = 16'h400;
-parameter MEM_BASE = 16'h4000;
+parameter MEM_BASE = 16'h10000;
 
 reg [5:0]  cur_instruction = 6'd0;
 reg [15:0] PC = 16'd0;
