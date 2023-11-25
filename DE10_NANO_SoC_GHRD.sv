@@ -1817,8 +1817,23 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
                     else tmp_word <= data[31:16];
                 end
 
+                CPU_STATE_INSTR_EXEC: begin
+                    if (tmp_word == 16'hFFFF) begin
+                        read_req <= 1;
+                        byte_enable <= 4'b1111;
+                        address <= MEM_BASE + {SP[15:2], 2'b00};
+                        SP <= SP + 16'd2;
+                        byte_enable <= 4'b1111;
+                    end
+                end
+
+                CPU_STATE_INSTR_OPERAND_EXEC_1: begin
+                    if (SP[1]) tmp_address <= data[15:0];
+                    else tmp_address <= data[31:16];
+                end
+
                 CPU_STATE_INSTR_WRITEBACK: begin
-                    if (FR[0]) PC <= PC + tmp_word;
+                    if (tmp_word == 16'hFFFF) PC <= PC + address;
                 end
 
                 default: begin
@@ -1830,7 +1845,20 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         6'b101001: begin
             case (cur_cpu_state)
                 CPU_STATE_INSTR_OPERAND_FETCH: begin
-                    if (FR[0]) PC <= PC + cur_imm;
+                    read_req <= 1;
+                    byte_enable <= 4'b1111;
+                    address <= MEM_BASE + {SP[15:2], 2'b00};
+                    SP <= SP + 16'd2;
+                    byte_enable <= 4'b1111;
+                end
+
+                CPU_STATE_INSTR_OPERAND_FETCH_1: begin
+                    if (SP[1]) tmp_word <= data[15:0];
+                    else tmp_word <= data[31:16];
+                end
+
+                CPU_STATE_INSTR_EXEC: begin
+                    if (tmp_word == 16'hFFFF) PC <= PC + cur_imm;
                 end
 
                 default: begin
