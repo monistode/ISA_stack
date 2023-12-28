@@ -454,6 +454,7 @@ cycle_done <= cur_cpu_state == CPU_STATE_INSTR_WRITEBACK_1;
         case (cur_instruction)
         // NOP, lol
         default: begin
+            if (cur_cpu_state == CPU_STATE_INSTR_WRITEBACK) PC <= PC + 1;
         end
 
         // HALT
